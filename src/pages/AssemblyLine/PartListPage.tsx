@@ -4,6 +4,7 @@ import PrimaryButton from "../../components/PrimaryButton"
 import Table from "../../components/Table"
 import MainTitle from "../../components/Title/MainTitle"
 import { PARTS } from "../../types/const"
+import { IoIosArrowDroprightCircle } from "react-icons/io"
 
 const partHead = ["Part Number", "Part Name", "Quantity"]
 
@@ -38,7 +39,9 @@ export default function PartListPage() {
                 <div className="px-3 py-1 text-white bg-green-500 rounded-full">Lengkap</div>
               </div>
 
-              <PrimaryButton>Start</PrimaryButton>
+              <PrimaryButton
+                icon={<IoIosArrowDroprightCircle className="w-6 h-6" />}
+              >Start</PrimaryButton>
 
             </div>
           </div>

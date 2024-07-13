@@ -9,44 +9,52 @@ const breadcrumbItems = [
     label: "Fabrication",
   },
   {
-    label: "Order List"
+    label: "Shop Floor"
   }
 ]
 
-const orderHead = ["Part Number", "Part Name", "Kanban ID", "Status"]
+const shopHead = ["Part Number", "Part Name", "Plan Start", "Plan Finish", "Actual Start", "Actual Finish", "Time Remaining", "Station"]
 
-const orderBody = [
+const shopBody = [
   {
     partNumber: "asdhasidha",
     partName: "Part 1",
-    kanbanId: "K123",
-    status: "Pending"
+    planStart: "2021-08-01 08:00",
+    planFinish: "2021-08-01 10:00",
+    actualStart: "2021-08-01 08:30",
+    actualFinish: "2021-08-01 10:30",
+    timeRemaining: "30 minutes",
+    station: "Station 1"
   },
   {
     partNumber: "jabduyq",
     partName: "Part 2",
-    kanbanId: "K124",
-    status: "Completed"
+    planStart: "2021-08-01 08:00",
+    planFinish: "2021-08-01 10:00",
+    actualStart: "2021-08-01 08:30",
+    actualFinish: "2021-08-01 10:30",
+    timeRemaining: "30 minutes",
+    station: "Station 2"
   }
 ]
 
-function OrderListPage() {
+function ShopFloorPage() {
   return (
     <AuthenticatedLayout>
       <Breadcrumb items={breadcrumbItems} />
 
       <div className="p-6">
         <div className="flex items-center justify-between gap-4">
-          <MainTitle>Order List</MainTitle>
+          <MainTitle>Shop Floor</MainTitle>
           <PrimaryButton>Download</PrimaryButton>
         </div>
 
-        <Table head={orderHead} body={orderBody} actions={[
+        <Table head={shopHead} body={shopBody} actions={[
           {
-            label: "Deliver",
+            label: "Finish",
             color: "bg-green-500",
             onClick: () => {
-              console.log("Deliver")
+              console.log("Finish")
             }
           }
         ]} />
@@ -55,4 +63,4 @@ function OrderListPage() {
   )
 }
 
-export default OrderListPage
+export default ShopFloorPage

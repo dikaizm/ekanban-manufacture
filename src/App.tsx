@@ -12,7 +12,7 @@ import AssemblyStoreOrderListPage from './pages/AssemblyStore/OrderListPage'
 import AssemblyStorePartListPage from './pages/AssemblyStore/PartListPage'
 
 import FabricationOrderListPage from './pages/Fabrication/OrderListPage'
-import FabricationPartListPage from './pages/Fabrication/PartListPage'
+import FabricationShopFloorPage from './pages/Fabrication/ShopFloorPage'
 import FabricationKanbanPage from './pages/Fabrication/KanbanPage'
 
 function App() {
@@ -42,7 +42,7 @@ function App() {
               <Route path='/dashboard/fabrication' children={
                 <>
                   <Route path='/dashboard/fabrication/order' element={<FabricationOrderListPage />} />
-                  <Route path='/dashboard/fabrication/part' element={<FabricationPartListPage />} />
+                  <Route path='/dashboard/fabrication/shop-floor' element={<FabricationShopFloorPage />} />
                   <Route path='/dashboard/fabrication/kanban' element={<FabricationKanbanPage />} />
                 </>
               } />

@@ -25,12 +25,12 @@ export default function DashboardPage() {
 
         <section className="mt-4">
           <div className="w-full overflow-hidden bg-white border rounded-lg">
-            <div className="flex items-center justify-between px-5 pt-5">
+            <div className="flex items-center justify-between px-5 pt-4">
               <CardTitle>Production Progress</CardTitle>
               <PrimaryButton>View All</PrimaryButton>
             </div>
 
-            <div className="relative mt-6 overflow-x-auto">
+            <div className="relative mt-4 overflow-x-auto">
               <table className="w-full text-sm text-left text-gray-500 rtl:text-right">
                 <thead className="text-xs text-gray-700 uppercase bg-slate-100">
                   <tr>

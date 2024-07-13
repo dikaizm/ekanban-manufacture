@@ -77,7 +77,7 @@ export default function Sidebar() {
             element: (
               <>
                 <MenuSubItem link="/dashboard/fabrication/order">Order List</MenuSubItem>
-                <MenuSubItem link="/dashboard/fabrication/part">Shop Floor</MenuSubItem>
+                <MenuSubItem link="/dashboard/fabrication/shop-floor">Shop Floor</MenuSubItem>
                 <MenuSubItem link="/dashboard/fabrication/kanban">Kanban Board</MenuSubItem>
               </>
             ),
