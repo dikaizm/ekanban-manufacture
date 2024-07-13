@@ -5,7 +5,7 @@ export type PartType = {
 }
 
 export type PartKanbanType = {
-    id: number
+    id: string
     partNumber: string
     partName: string
     quantity: number

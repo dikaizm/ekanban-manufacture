@@ -2,8 +2,8 @@ import { PartKanbanType } from "../types/global"
 
 export function KanbanColumn({ title, color = "bg-red-500", parts }: { title: string, color?: string, parts: PartKanbanType[] }) {
     return (
-        <div className="flex flex-col gap-4 overflow-hidden border rounded-lg bg-slate-100">
-            <div className="bg-white">
+        <div className="flex flex-col gap-4 border rounded-lg bg-slate-100">
+            <div className="overflow-hidden bg-white rounded-t-lg">
                 <div className={"h-2 " + color}></div>
                 <h3 className="p-2 text-lg font-semibold text-center ">{title}</h3>
             </div>
@@ -18,7 +18,7 @@ export function KanbanColumn({ title, color = "bg-red-500", parts }: { title: st
 
 function KanbanCard({ part, color = "bg-red-500" }: { part: PartKanbanType, color: string }) {
     return (
-        <button type="button" className="flex overflow-hidden bg-white rounded-lg shadow hover:shadow-xl">
+        <button type="button" className="flex overflow-hidden transition-shadow duration-500 bg-white rounded-lg shadow hover:shadow-xl">
             <div className={"w-1 h-full " + color}></div>
             <div className="w-full p-4">
                 <div className="flex flex-col gap-2">

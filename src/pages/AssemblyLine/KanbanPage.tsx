@@ -24,7 +24,7 @@ export default function KanbanPage() {
           <div className="grid grid-cols-3 gap-4 mt-6">
             <KanbanColumn title="Queue" color="bg-red-500" parts={[
               {
-                id: 1,
+                id: "aasdlk",
                 partNumber: "asdhad asd ads asidha",
                 partName: "Part 1",
                 quantity: 10,
@@ -32,7 +32,7 @@ export default function KanbanPage() {
                 status: "queue"
               },
               {
-                id: 2,
+                id: "asjdo",
                 partNumber: "jabduyq",
                 partName: "Part 2",
                 quantity: 20,
@@ -43,7 +43,7 @@ export default function KanbanPage() {
 
             <KanbanColumn title="On Progress" color="bg-yellow-400" parts={[
               {
-                id: 1,
+                id: "1asdas",
                 partNumber: "asdhad asd ads asidha",
                 partName: "Part 1",
                 quantity: 10,
@@ -51,7 +51,7 @@ export default function KanbanPage() {
                 status: "queue"
               },
               {
-                id: 2,
+                id: "2fdf",
                 partNumber: "jabduyq",
                 partName: "Part 2",
                 quantity: 20,
@@ -62,7 +62,7 @@ export default function KanbanPage() {
 
             <KanbanColumn title="Done" color="bg-green-500" parts={[
               {
-                id: 1,
+                id: "asd1",
                 partNumber: "asdhad asd ads asidha",
                 partName: "Part 1",
                 quantity: 10,
@@ -70,7 +70,7 @@ export default function KanbanPage() {
                 status: "queue"
               },
               {
-                id: 2,
+                id: "2dfg",
                 partNumber: "jabduyq",
                 partName: "Part 2",
                 quantity: 20,
