@@ -7,10 +7,15 @@ body {
 }
 
 /* Hide input border when typing */
-/* input {
+input {
   outline: none;
   background: transparent;
-} */
+}
+
+select {
+  outline: none;
+  background: transparent;
+}
 
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
