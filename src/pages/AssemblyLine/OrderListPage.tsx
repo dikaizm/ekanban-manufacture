@@ -6,16 +6,18 @@ import { useEffect, useState } from "react"
 import CreateOrderModal from "./CreateOrderModal"
 import Breadcrumb from "../../components/Breadcrumb"
 
-const orderHead = ["Part Number", "Part Name", "Quantity", "Status"]
+const orderHead = ["Order ID", "Part Number", "Part Name", "Quantity", "Status"]
 
 const orderBody = [
   {
+    orderId: "123",
     partNumber: "asdhasidha",
     partName: "Part 1",
     quantity: 10,
     status: "Pending"
   },
   {
+    orderId: "124",
     partNumber: "jabduyq",
     partName: "Part 2",
     quantity: 20,

@@ -17,7 +17,8 @@ function CreateOrderModal({ onClose }: CreateOrderModalType) {
   const [partNumber, setPartNumber] = useState<string>('')
   const [quantity, setQuantity] = useState<string>('')
 
-  const encodedQRData = encodeURIComponent(JSON.stringify({ partName, partNumber, quantity }))
+  // const encodedQRData = encodeURIComponent(JSON.stringify({ partName, partNumber, quantity }))
+  const encodedQRData = encodeURIComponent("https://stelarhub.com")
 
   // Error states
   const [partNameError, setPartNameError] = useState<string>('')

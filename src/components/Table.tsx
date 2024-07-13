@@ -1,10 +1,18 @@
+interface ActionType {
+    label: string
+    color: string
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onClick?: (item: { [key: string]: any }) => void
+}
+
 interface TableType {
     head: string[]
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     body: { [key: string]: any }[]
+    actions?: ActionType[]
 }
 
-export default function Table({ head, body }: TableType) {
+export default function Table({ head, body, actions }: TableType) {
     if (head.length === 0) { throw new Error("Head must not be empty") }
     if (body.length === 0) { throw new Error("Body must not be empty") }
 
@@ -28,10 +36,13 @@ export default function Table({ head, body }: TableType) {
                                 </th>
                             )
                         })}
+                        {actions && (
+                            <th scope="col" className="px-6 py-3">Action</th>
+                        )}
                     </tr>
                 </thead>
                 <tbody>
-                    <TableRow data={body} />
+                    <TableRow data={body} actions={actions} />
                 </tbody>
             </table>
         </div>
@@ -42,9 +53,10 @@ export default function Table({ head, body }: TableType) {
 interface TableRowType {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data: { [key: string]: any }[]
+    actions?: ActionType[]
 }
 
-function TableRow({ data }: TableRowType) {
+function TableRow({ data, actions }: TableRowType) {
     if (data.length === 0) {
         return (
             <tr>
@@ -65,6 +77,17 @@ function TableRow({ data }: TableRowType) {
                                 {key === "#" ? index + 1 : item[key]}
                             </td>
                         ))}
+                        {actions && (
+                            <td className="flex gap-2 px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                {actions.map((action, index) => {
+                                    return (
+                                        <button key={index} onClick={() => action.onClick && action.onClick(item)} className={"py-1 px-2 rounded-lg text-white " + (action.color)}>
+                                            {action.label}
+                                        </button>
+                                    )
+                                })}
+                            </td>
+                        )}
                     </tr>
                 );
             })}

@@ -16,9 +16,9 @@ export default function PrimaryButton({ children, icon, style = 'fill', onClick,
     }
 
     return (
-        <button type={type} onClick={onClick} className={"flex gap-2 items-center px-3 py-2 rounded-lg " + getStyle(style)}>
-            <span className="text-sm font-semibold">{children}</span>
+        <button type={type} onClick={onClick} className={"flex gap-2 items-center px-4 py-2 rounded-lg " + getStyle(style)}>
             {icon}
+            <span className="font-semibold">{children}</span>
         </button>
     )
 }

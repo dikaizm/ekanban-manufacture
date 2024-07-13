@@ -3,21 +3,9 @@ import Breadcrumb from "../../components/Breadcrumb"
 import PrimaryButton from "../../components/PrimaryButton"
 import Table from "../../components/Table"
 import MainTitle from "../../components/Title/MainTitle"
+import { PARTS } from "../../types/const"
 
-const orderHead = ["Part Number", "Part Name", "Quantity"]
-
-const orderBody = [
-  {
-    partNumber: "asdhasidha",
-    partName: "Part 1",
-    quantity: 10,
-  },
-  {
-    partNumber: "jabduyq",
-    partName: "Part 2",
-    quantity: 20,
-  }
-]
+const partHead = ["Part Number", "Part Name", "Quantity"]
 
 const breadcrumbItems = [
   {
@@ -40,7 +28,20 @@ export default function PartListPage() {
             <PrimaryButton>Download</PrimaryButton>
           </div>
 
-          <Table head={orderHead} body={orderBody} />
+          <Table head={partHead} body={PARTS} />
+
+          <div className="w-full mt-3 bg-white border rounded-lg">
+            <div className="flex items-center justify-between gap-2 p-2">
+
+              <div className="flex items-center gap-2 ml-2 text-sm font-semibold">
+                <span>Status Part</span>
+                <div className="px-3 py-1 text-white bg-green-500 rounded-full">Lengkap</div>
+              </div>
+
+              <PrimaryButton>Start</PrimaryButton>
+
+            </div>
+          </div>
         </div>
       </AuthenticatedLayout>
     </>
