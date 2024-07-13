@@ -1,9 +1,11 @@
+import Cookies from "js-cookie"
 import { ChangeEvent, FormEvent, useState } from "react"
 import { MdEmail, MdLock } from "react-icons/md"
 import InputText from "../components/InputText"
 // import appConfig from "../config/env"
 import { useNavigate } from "react-router-dom"
 import AppLogo from "../components/AppLogo"
+import appConfig from "../config/env"
 
 export default function LoginPage() {
   const [email, setEmail] = useState<string>('')
@@ -13,6 +15,7 @@ export default function LoginPage() {
   // error state
   const [emailError, setEmailError] = useState<string>('')
   const [passwordError, setPasswordError] = useState<string>('')
+  const [loginError, setLoginError] = useState<string>('')
 
   const navigate = useNavigate()
 
@@ -35,28 +38,31 @@ export default function LoginPage() {
     if (!password) setPasswordError('Password tidak boleh kosong')
     if (!email || !password) return
 
-    return navigate('/')
+    try {
+      const response = await fetch(`${appConfig.apiUrl}/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password })
+      }).then(async res => {
+        return { status: res.status, data: await res.json() }
+      })
 
-    // try {
-    //   const response = await fetch(`${appConfig.apiUrl}/api/auth/login`, {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify({ email, password })
-    //   }).then(res => {
-    //     if (res.ok) return res.json()
+      console.log(response);
+      if (response.status !== 200) {
+        setLoginError(response.data.message)
+        return;
+      }
+      
+      // Save token to cookie
+      Cookies.set('auth', response.data.data.token, { expires: remember ? 365 : 1 })
 
-    //     throw new Error('Login failed')
-    //   })
+      return navigate('/dashboard')
 
-    //   console.log(response)
-
-    //   return navigate('/dashboard')
-
-    // } catch (error) {
-    //   console.error(error)
-    // }
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   return (
@@ -80,10 +86,10 @@ export default function LoginPage() {
           </div>
 
           <form className="flex flex-col gap-4 mt-6" onSubmit={handleSubmit}>
-            <InputText id="email" label="Email" placeholder="Masukkan email" value={email} onChange={handleEmail} icon={<MdEmail className="w-full h-full" />}
+            <InputText id="email" label="Email" placeholder="Masukkan email" onChange={handleEmail} icon={<MdEmail className="w-full h-full" />}
               error={{ value: emailError, setValue: setEmailError }}
             />
-            <InputText id="password" label="Password" placeholder="Masukkan password" type="password" value={password} onChange={handlePassword} icon={<MdLock className="w-full h-full" />}
+            <InputText id="password" label="Password" placeholder="Masukkan password" type="password" onChange={handlePassword} icon={<MdLock className="w-full h-full" />}
               error={{ value: passwordError, setValue: setPasswordError }}
             />
             <div>
@@ -91,6 +97,7 @@ export default function LoginPage() {
               <label className="ml-2" htmlFor="remember">Ingat saya</label>
             </div>
             <button type="submit" className="p-2 text-white bg-blue-500 rounded-lg">Login</button>
+            {loginError && <span className="text-xs text-red-500">{loginError}</span>}
           </form>
 
         </div>
