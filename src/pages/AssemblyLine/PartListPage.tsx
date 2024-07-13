@@ -1,4 +1,5 @@
 import AuthenticatedLayout from "../../components/AuthenticatedLayout"
+import Breadcrumb from "../../components/Breadcrumb"
 import PrimaryButton from "../../components/PrimaryButton"
 import Table from "../../components/Table"
 import MainTitle from "../../components/Title/MainTitle"
@@ -18,10 +19,21 @@ const orderBody = [
   }
 ]
 
+const breadcrumbItems = [
+  {
+    label: "Assembly Line",
+  },
+  {
+    label: "Part List"
+  }
+]
+
 export default function PartListPage() {
   return (
     <>
       <AuthenticatedLayout>
+        <Breadcrumb items={breadcrumbItems} />
+
         <div className="p-6">
           <div className="flex items-center justify-between gap-4">
             <MainTitle>Part List</MainTitle>

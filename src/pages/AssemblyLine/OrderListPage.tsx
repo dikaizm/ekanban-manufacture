@@ -4,6 +4,7 @@ import MainTitle from "../../components/Title/MainTitle"
 import Table from "../../components/Table"
 import { useEffect, useState } from "react"
 import CreateOrderModal from "./CreateOrderModal"
+import Breadcrumb from "../../components/Breadcrumb"
 
 const orderHead = ["Part Number", "Part Name", "Quantity", "Status"]
 
@@ -19,6 +20,15 @@ const orderBody = [
     partName: "Part 2",
     quantity: 20,
     status: "Completed"
+  }
+]
+
+const breadcrumbItems = [
+  {
+    label: "Assembly Line",
+  },
+  {
+    label: "Order List"
   }
 ]
 
@@ -38,6 +48,8 @@ export default function OrderListPage() {
   return (
     <>
       <AuthenticatedLayout>
+        <Breadcrumb items={breadcrumbItems} />
+
         <div className="p-6">
           <div className="flex items-center justify-between gap-4">
             <MainTitle>Order List</MainTitle>

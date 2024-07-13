@@ -122,16 +122,16 @@ interface MenuItemType {
   }
 }
 
+function isActive(currentPath:string, path: string) {
+  if (currentPath === path) return 'bg-slate-100 hover:bg-slate-200 '
+  else return 'hover:bg-slate-100 '
+}
+
 function MenuItem({ children, icon, link, subitems }: MenuItemType) {
   const navigate = useNavigate()
   const { isSidebarOpen } = useToggleSidebar()
 
   const currentPath = window.location.pathname
-
-  function isActive(path: string) {
-    if (currentPath === path) return 'bg-slate-100 hover:bg-slate-200 '
-    else return 'hover:bg-slate-100 '
-  }
 
   function handleNavigate(link: string) {
     navigate(link)
@@ -148,7 +148,7 @@ function MenuItem({ children, icon, link, subitems }: MenuItemType) {
 
         subitems?.state.setValue(!subitems.state.value)
       }}
-      className={'relative flex flex-col w-full rounded-lg ' + (isActive(link)) + (!isSidebarOpen ? 'justify-center ' : 'overflow-hidden ') + (subitems?.state.value ? 'bg-slate-100 ' : '')}
+      className={'relative flex flex-col w-full rounded-lg ' + (isActive(currentPath, link)) + (!isSidebarOpen ? 'justify-center ' : 'overflow-hidden ') + (subitems?.state.value ? 'bg-slate-100 ' : '')}
     >
       <div className='flex items-center justify-between w-full px-3 py-2'>
         <div className='flex items-center w-full gap-4'>

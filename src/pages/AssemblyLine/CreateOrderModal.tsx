@@ -1,9 +1,9 @@
 import { ChangeEvent, useEffect, useState } from "react"
-import InputText from "../../components/InputText"
+import InputText from "../../components/Input/InputText"
 import PrimaryButton from "../../components/PrimaryButton"
 import MainTitle, { TitleSize } from "../../components/Title/MainTitle"
 import { MdClose, MdEditSquare } from "react-icons/md"
-import InputSelect from "../../components/InputSelect"
+import InputSelect from "../../components/Input/InputSelect"
 import { PARTS } from "../../types/const"
 
 interface CreateOrderModalType {
@@ -57,6 +57,7 @@ function CreateOrderModal({ onClose }: CreateOrderModalType) {
   useEffect(() => {
     const partName = PARTS.find(part => part.partNumber === partNumber)?.partName
     setPartName(partName || '')
+    setPartNumberError('')
   }, [partNumber])
 
   return (

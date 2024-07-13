@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react"
 import { MdEmail, MdLock, MdPerson } from "react-icons/md"
-import InputText from "../components/InputText"
+import InputText from "../components/Input/InputText"
 // import appConfig from "../config/env"
 import { useNavigate } from "react-router-dom"
 import AppLogo from "../components/AppLogo"
