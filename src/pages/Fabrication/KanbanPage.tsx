@@ -24,7 +24,7 @@ export default function KanbanPage() {
           <div className="grid grid-cols-3 gap-4 mt-6">
             <KanbanColumn title="Queue" color="bg-red-500" parts={[
               {
-                id: 1,
+                id: "adaoks",
                 partNumber: "asdhad asd ads asidha",
                 partName: "Part 1",
                 quantity: 10,
@@ -32,18 +32,18 @@ export default function KanbanPage() {
                 status: "queue"
               },
               {
-                id: 2,
+                id: "asdof",
                 partNumber: "jabduyq",
                 partName: "Part 2",
                 quantity: 20,
                 plannedStart: "2021-09-02",
                 status: "queue"
               }
-            ]} />
+            ]} type={"production"} />
 
             <KanbanColumn title="On Progress" color="bg-yellow-400" parts={[
               {
-                id: 1,
+                id: "ajdoiajd",
                 partNumber: "asdhad asd ads asidha",
                 partName: "Part 1",
                 quantity: 10,
@@ -51,18 +51,18 @@ export default function KanbanPage() {
                 status: "queue"
               },
               {
-                id: 2,
+                id: "adsjaos",
                 partNumber: "jabduyq",
                 partName: "Part 2",
                 quantity: 20,
                 plannedStart: "2021-09-02",
                 status: "queue"
               }
-            ]} />
+            ]} type={"production"} />
 
             <KanbanColumn title="Done" color="bg-green-500" parts={[
               {
-                id: 1,
+                id: "oaids",
                 partNumber: "asdhad asd ads asidha",
                 partName: "Part 1",
                 quantity: 10,
@@ -70,14 +70,14 @@ export default function KanbanPage() {
                 status: "queue"
               },
               {
-                id: 2,
+                id: "asdh",
                 partNumber: "jabduyq",
                 partName: "Part 2",
                 quantity: 20,
                 plannedStart: "2021-09-02",
                 status: "queue"
               }
-            ]} />
+            ]} type={"production"} />
           </div>
         </div>
       </AuthenticatedLayout>

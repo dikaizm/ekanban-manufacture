@@ -2,7 +2,7 @@ import { MouseEvent, ReactNode, useState } from 'react'
 import { BiSolidFactory } from 'react-icons/bi'
 import { GoHomeFill } from 'react-icons/go'
 import { RiDatabase2Fill } from 'react-icons/ri'
-import { useToggleSidebar } from '../context/utils/sidebarContext'
+import { useToggleSidebar } from '../provider/utils/sidebarContext'
 import { useNavigate } from 'react-router-dom'
 import { TiArrowSortedDown, TiArrowSortedUp } from 'react-icons/ti'
 

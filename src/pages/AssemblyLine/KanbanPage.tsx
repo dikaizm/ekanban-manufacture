@@ -1,7 +1,9 @@
 import AuthenticatedLayout from "../../components/AuthenticatedLayout"
 import Breadcrumb from "../../components/Breadcrumb"
 import { KanbanColumn } from "../../components/Kanban"
+import ModalQR from "../../components/ModalQR"
 import MainTitle from "../../components/Title/MainTitle"
+import { useModalQR } from "../../provider/utils/modalQRContext"
 
 const breadcrumbItems = [
   {
@@ -13,6 +15,8 @@ const breadcrumbItems = [
 ]
 
 export default function KanbanPage() {
+  const { isModalQRVisible, modalQRData } = useModalQR()
+
   return (
     <>
       <AuthenticatedLayout>
@@ -39,7 +43,7 @@ export default function KanbanPage() {
                 plannedStart: "2021-09-02",
                 status: "queue"
               }
-            ]} />
+            ]} type={"production"} />
 
             <KanbanColumn title="On Progress" color="bg-yellow-400" parts={[
               {
@@ -58,7 +62,7 @@ export default function KanbanPage() {
                 plannedStart: "2021-09-02",
                 status: "queue"
               }
-            ]} />
+            ]} type={"production"} />
 
             <KanbanColumn title="Done" color="bg-green-500" parts={[
               {
@@ -77,10 +81,16 @@ export default function KanbanPage() {
                 plannedStart: "2021-09-02",
                 status: "queue"
               }
-            ]} />
+            ]} type={"production"} />
           </div>
         </div>
       </AuthenticatedLayout>
+
+      {isModalQRVisible && (
+        <ModalQR
+          data={modalQRData}
+        />
+      )}
     </>
   )
 }

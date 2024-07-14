@@ -6,7 +6,7 @@ import { TbLogout2 } from 'react-icons/tb'
 import { useState } from 'react'
 import { FaPerson } from 'react-icons/fa6'
 import { useNavigate } from 'react-router-dom'
-import { useToggleSidebar } from '../context/utils/sidebarContext'
+import { useToggleSidebar } from '../provider/utils/sidebarContext'
 
 export default function Topbar() {
   const [isProfilOpen, setIsProfilOpen] = useState<boolean>(false)

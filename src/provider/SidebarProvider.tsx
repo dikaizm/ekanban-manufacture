@@ -1,7 +1,7 @@
 import { ReactNode, useState } from "react"
 import { SidebarContext } from "./utils/sidebarContext"
 
-export function SidebarContextProvider({ children }: { children: ReactNode }) {
+export function SidebarProvider({ children }: { children: ReactNode }) {
     const [value, setValue] = useState<boolean>(
         localStorage.getItem('sidebar') === 'true' ? true : false
     )
