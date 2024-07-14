@@ -74,7 +74,7 @@ export default function RegisterPage() {
 
   return (
     <main className="relative flex flex-col justify-between min-h-screen mx-auto bg-slate-50">
-      <div className="relative flex justify-between gap-4 px-8 py-4">
+      <div className="relative flex flex-col justify-between gap-4 px-8 py-4 sm:flex-row">
         <a href="/">
           <AppLogo />
         </a>

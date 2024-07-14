@@ -11,7 +11,7 @@ Chartjs.register(ArcElement, Tooltip, Legend, ChartDataLabels)
 export default function DashboardPage() {
   return (
     <AuthenticatedLayout className="h-screen">
-      <div className="p-6 bg-slate-50">
+      <div className="p-4 sm:p-6 bg-slate-50">
         <section className="flex flex-col justify-between gap-4 sm:flex-row">
 
           <div className="w-full p-5 bg-white border rounded-lg">
@@ -146,7 +146,7 @@ function ProgressItem({ title, progress, icon }: ProgressItemType) {
           <span className="text-sm font-medium">{progress}%</span>
         </div>
         <div className="w-full h-3 mt-1 bg-gray-200 rounded-lg">
-          <div className="h-full transition-all duration-700 bg-blue-500 rounded-lg" style={{ width: `${displayedProgress}%` }}></div>
+          <div className="h-full transition-all duration-700 ease-in-out bg-blue-500 rounded-lg" style={{ width: `${displayedProgress}%` }}></div>
         </div>
       </div>
     </div>

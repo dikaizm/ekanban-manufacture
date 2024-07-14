@@ -33,7 +33,7 @@ export default function KanbanPage() {
       <AuthenticatedLayout>
         <Breadcrumb items={breadcrumbItems} />
 
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           <MainTitle>Kanban Board</MainTitle>
 
           <div className="grid grid-cols-1 gap-4 mt-6 sm:grid-cols-3">

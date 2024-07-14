@@ -22,8 +22,8 @@ export default function HomePage() {
         </a>
 
         <div className="flex items-center gap-3">
-          <a className="px-3 py-2 text-white bg-blue-500 rounded-lg" href="/login">Masuk</a>
-          <a className="px-3 py-2 text-blue-500 border border-blue-500 rounded-lg" href="/register">Daftar Akun</a>
+          <a className="px-3 py-2 text-white bg-blue-500 rounded-lg" href="/login">Login</a>
+          <a className="px-3 py-2 text-blue-500 border border-blue-500 rounded-lg" href="/register">Register</a>
         </div>
       </div>
 
