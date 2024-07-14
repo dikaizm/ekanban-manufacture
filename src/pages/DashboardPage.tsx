@@ -12,7 +12,7 @@ export default function DashboardPage() {
   return (
     <AuthenticatedLayout className="h-screen">
       <div className="p-6 bg-slate-50">
-        <section className="flex justify-between gap-4">
+        <section className="flex flex-col justify-between gap-4 sm:flex-row">
 
           <div className="w-full p-5 bg-white border rounded-lg">
             <CardTitle>Progress Track</CardTitle>
@@ -26,47 +26,49 @@ export default function DashboardPage() {
           <div className="p-5 bg-white border rounded-lg">
             <CardTitle>Delay vs On-Time</CardTitle>
 
-            <div className="w-64 mt-3">
-              <Doughnut
-                data={{
-                  labels: ['Delay', 'On-Time'],
-                  datasets: [
-                    {
-                      data: [21, 79],
-                      backgroundColor: [
-                        'rgb(255, 178, 44)',
-                        'rgb(54, 162, 235)',
-                      ],
-                      borderWidth: 1,
-                    },
-                  ]
-                }}
-                options={{
-                  responsive: true,
-                  maintainAspectRatio: true,
-                  plugins: {
-                    legend: {
-                      position: 'bottom',
-                    },
-                    tooltip: {
-                      enabled: true,
-                      callbacks: {
-                        label: function (data) {
-                          const label = data.label;
-                          const value = data.dataset.data[data.dataIndex];
-                          return `${label}: ${value}%`;
-                        }
+            <div className="flex justify-center w-full mt-3">
+              <div className="w-[13rem] md:w-56 sm:w-64">
+                <Doughnut
+                  data={{
+                    labels: ['Delay', 'On-Time'],
+                    datasets: [
+                      {
+                        data: [21, 79],
+                        backgroundColor: [
+                          'rgb(255, 178, 44)',
+                          'rgb(54, 162, 235)',
+                        ],
+                        borderWidth: 1,
                       },
-                    },
-                    datalabels: {
-                      color: '#fff',
-                      formatter: function (value) {
-                        return `${value}%`;
+                    ]
+                  }}
+                  options={{
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                      legend: {
+                        position: 'bottom',
+                      },
+                      tooltip: {
+                        enabled: true,
+                        callbacks: {
+                          label: function (data) {
+                            const label = data.label;
+                            const value = data.dataset.data[data.dataIndex];
+                            return `${label}: ${value}%`;
+                          }
+                        },
+                      },
+                      datalabels: {
+                        color: '#fff',
+                        formatter: function (value) {
+                          return `${value}%`;
+                        }
                       }
-                    }
-                  },
-                }}
-              />
+                    },
+                  }}
+                />
+              </div>
             </div>
           </div>
         </section>

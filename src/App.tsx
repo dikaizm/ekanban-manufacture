@@ -15,6 +15,7 @@ import FabricationOrderListPage from './pages/Fabrication/OrderListPage'
 import FabricationShopFloorPage from './pages/Fabrication/ShopFloorPage'
 import FabricationKanbanPage from './pages/Fabrication/KanbanPage'
 import { ModalQRProvider } from './provider/ModalQRProvider'
+import ConfirmKanbanPage from './pages/ConfirmKanbanPage'
 
 function App() {
   return (
@@ -50,6 +51,8 @@ function App() {
                 } />
               </>
             } />
+            <Route path='/confirm-kanban/:cardId' element={<ConfirmKanbanPage />} />
+            <Route path='*' element={<div>404 Not Found</div>} />
           </Routes>
         </Router>
       </ModalQRProvider>

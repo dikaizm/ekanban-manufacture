@@ -36,7 +36,7 @@ export default function KanbanPage() {
         <div className="p-6">
           <MainTitle>Kanban Board</MainTitle>
 
-          <div className="grid grid-cols-3 gap-4 mt-6">
+          <div className="grid grid-cols-1 gap-4 mt-6 sm:grid-cols-3">
             <KanbanColumn title="Queue" color="bg-red-500" parts={[
               {
                 id: "aasdlk",

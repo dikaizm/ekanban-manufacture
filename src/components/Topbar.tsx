@@ -42,7 +42,7 @@ export default function Topbar() {
   return (
     <header className='fixed z-50 flex items-center justify-between w-full h-16 gap-4 pl-4 pr-6 bg-white border-b'>
       <section className='flex items-center gap-4'>
-        <button onClick={handleMenuClick} type="button" className='w-10 h-10 p-2 rounded-full hover:bg-slate-200'>
+        <button onClick={handleMenuClick} type="button" className='w-10 p-2 rounded-full h-fit hover:bg-slate-200'>
           <MdMenu className='w-full h-full' />
         </button>
 
@@ -51,7 +51,7 @@ export default function Topbar() {
 
       <section ref={profileRef} className='relative'>
         <button type="button" onClick={handleProfileClick} className={'flex items-center gap-2 p-2 border rounded-full  hover:bg-slate-200 ' + (isProfilOpen ? 'bg-slate-200' : 'border-slate-300')}>
-          <span className='text-sm font-semibold'>John Doe</span>
+          <span className='hidden text-sm font-semibold sm:block'>John Doe</span>
           <BsPersonCircle className='w-6 h-6' />
         </button>
 
