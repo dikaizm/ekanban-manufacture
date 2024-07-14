@@ -2,9 +2,14 @@ import { PartType } from "./global";
 
 export const PARTS: PartType[] = [
     {
+        partNumber: 'V5745094220001',
+        partName: 'STIFFENER',
+        quantity: 1
+    },
+    {
         partNumber: 'V5745094320001',
         partName: 'STIFFENER',
-        quantity: 2
+        quantity: 1
     },
     {
         partNumber: 'V5745236520001',
