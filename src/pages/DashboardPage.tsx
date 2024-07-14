@@ -1,4 +1,4 @@
-import { ReactNode } from "react"
+import { ReactNode, useEffect, useState } from "react"
 import AuthenticatedLayout from "../components/AuthenticatedLayout"
 import { RiTableFill } from "react-icons/ri"
 import PrimaryButton from "../components/PrimaryButton"
@@ -121,6 +121,17 @@ interface ProgressItemType {
 }
 
 function ProgressItem({ title, progress, icon }: ProgressItemType) {
+  const [displayedProgress, setDisplayedProgress] = useState(0);
+
+  useEffect(() => {
+    setDisplayedProgress(0); // Reset progress to 0 to retrigger animation
+    const timer = setTimeout(() => {
+      setDisplayedProgress(progress);
+    }, 100); // Small delay to ensure the transition effect
+
+    return () => clearTimeout(timer); // Cleanup timer on component unmount or props change
+  }, [progress]);
+
   return (
     <div className="flex items-center justify-between gap-5">
       <div className="w-10 p-2 rounded-full h-fit bg-slate-200">
@@ -133,7 +144,7 @@ function ProgressItem({ title, progress, icon }: ProgressItemType) {
           <span className="text-sm font-medium">{progress}%</span>
         </div>
         <div className="w-full h-3 mt-1 bg-gray-200 rounded-lg">
-          <div className="h-full bg-blue-500 rounded-lg" style={{ width: `${progress}%` }}></div>
+          <div className="h-full transition-all duration-700 bg-blue-500 rounded-lg" style={{ width: `${displayedProgress}%` }}></div>
         </div>
       </div>
     </div>
