@@ -80,33 +80,33 @@ export default function RegisterPage() {
         </a>
 
         <div className="flex items-center gap-3">
-          <span>Sudah memiliki akun?</span>
-          <a className="px-3 py-2 text-blue-500 border border-blue-500 rounded-lg" href="/login">Masuk</a>
+          <span>Already have an account?</span>
+          <a className="px-3 py-2 text-blue-500 border border-blue-500 rounded-lg" href="/login">Login</a>
         </div>
       </div>
 
       <div className="flex items-center justify-center h-full ">
         <div className="relative p-12 rounded-xl w-[32rem] h-fit bg-white border border-slate-100">
           <div className="text-center">
-            <h1 className="text-2xl font-bold">Daftar Akun</h1>
-            <p>Masukkan data akun Anda</p>
+            <h1 className="text-2xl font-bold">Register Account</h1>
+            <p>Input your information</p>
           </div>
 
           <form className="flex flex-col gap-4 mt-6" onSubmit={handleSubmit}>
-            <InputText id="name" label="Nama Lengkap" placeholder="Masukkan nama lengkap" value={name} onChange={handleName} icon={<MdPerson className="w-full h-full" />}
+            <InputText id="name" label="Full Name" placeholder="Full Name" value={name} onChange={handleName} icon={<MdPerson className="w-full h-full" />}
               error={{ value: nameError, setValue: setNameError }}
             />
-            <InputText id="email" label="Email" placeholder="Masukkan email" value={email} onChange={handleEmail} icon={<MdEmail className="w-full h-full" />}
+            <InputText id="email" label="Username" placeholder="Input your username" value={email} onChange={handleEmail} icon={<MdEmail className="w-full h-full" />}
               error={{ value: emailError, setValue: setEmailError }}
             />
-            <InputText id="password" label="Password" placeholder="Masukkan password" type="password" value={password} onChange={handlePassword} icon={<MdLock className="w-full h-full" />}
+            <InputText id="password" label="Password" placeholder="Input your password" type="password" value={password} onChange={handlePassword} icon={<MdLock className="w-full h-full" />}
               error={{ value: passwordError, setValue: setPasswordError }}
             />
-            <InputText id="password" label="Ulangi Password" placeholder="Masukkan password yang sama" type="password" value={confirmPassword} onChange={handleConfirmPassword} icon={<MdLock className="w-full h-full" />}
+            <InputText id="password" label="Confirm Password" placeholder="Input the same password" type="password" value={confirmPassword} onChange={handleConfirmPassword} icon={<MdLock className="w-full h-full" />}
               error={{ value: confirmPasswordError, setValue: setConfirmPasswordError }}
             />
 
-            <button type="submit" className="p-2 text-white bg-blue-500 rounded-lg">Daftar</button>
+            <button type="submit" className="p-2 text-white bg-blue-500 rounded-lg">Register</button>
           </form>
 
         </div>

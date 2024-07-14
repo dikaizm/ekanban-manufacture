@@ -73,28 +73,27 @@ export default function LoginPage() {
         </a>
 
         <div className="flex items-center gap-3">
-          <span>Belum memiliki akun?</span>
-          <a className="px-3 py-2 text-blue-500 border border-blue-500 rounded-lg" href="/register">Daftar Akun</a>
+          <span>Don't have an account yet?</span>
+          <a className="px-3 py-2 text-blue-500 border border-blue-500 rounded-lg" href="/register">Register</a>
         </div>
       </div>
 
       <div className="flex items-center justify-center h-full ">
         <div className="relative p-12 rounded-xl w-[32rem] h-fit bg-white border border-slate-100">
           <div className="text-center">
-            <h1 className="text-2xl font-bold">Masuk ke Akun Anda</h1>
-            <p>Selamat datang kembali!</p>
+            <h1 className="text-2xl font-bold">Login to E-Kanban</h1>
           </div>
 
           <form className="flex flex-col gap-4 mt-6" onSubmit={handleSubmit}>
-            <InputText id="email" label="Email" placeholder="Masukkan email" onChange={handleEmail} icon={<MdEmail className="w-full h-full" />}
+            <InputText id="email" label="Username" placeholder="Input your username" onChange={handleEmail} icon={<MdEmail className="w-full h-full" />}
               error={{ value: emailError, setValue: setEmailError }}
             />
-            <InputText id="password" label="Password" placeholder="Masukkan password" type="password" onChange={handlePassword} icon={<MdLock className="w-full h-full" />}
+            <InputText id="password" label="Password" placeholder="Input your password" type="password" onChange={handlePassword} icon={<MdLock className="w-full h-full" />}
               error={{ value: passwordError, setValue: setPasswordError }}
             />
             <div>
               <input type="checkbox" id="remember" onChange={handleRemember} checked={remember} />
-              <label className="ml-2" htmlFor="remember">Ingat saya</label>
+              <label className="ml-2" htmlFor="remember">Remember me</label>
             </div>
             <button type="submit" className="p-2 text-white bg-blue-500 rounded-lg">Login</button>
             {loginError && <span className="text-xs text-red-500">{loginError}</span>}
