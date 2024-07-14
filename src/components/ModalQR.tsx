@@ -1,9 +1,10 @@
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 import { useModalQR } from "../provider/utils/modalQRContext"
 import { QRKanbanCardType } from "../types/global"
 import PrimaryButton from "./PrimaryButton"
 import MainTitle, { TitleSize } from "./Title/MainTitle"
 import { MdClose, MdQrCode } from "react-icons/md"
+import { useReactToPrint } from "react-to-print"
 
 interface ModalQRType {
   data?: QRKanbanCardType
@@ -13,6 +14,13 @@ interface ModalQRType {
 
 export default function ModalQR({ data, color, type = "production" }: ModalQRType) {
   const { closeModalQR } = useModalQR()
+
+  const contentToPrint = useRef<HTMLDivElement>(null)
+  const handlePrint = useReactToPrint({
+    documentTitle: "kanban-card_" + data?.cardId + "_" + type,
+    content: () => contentToPrint.current,
+    removeAfterPrint: true,
+  })
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -55,7 +63,8 @@ export default function ModalQR({ data, color, type = "production" }: ModalQRTyp
 
         {/* Content */}
 
-        <div className="p-4">
+        <div ref={contentToPrint} className="p-4">
+
           <div className={"p-3 border-t border-x border-slate-500 " + color}>
             <h2 className="text-3xl font-bold text-center">
               {type === "production" ? "PRODUCTION" : "WITHDRAWAL"} CARD
@@ -95,6 +104,7 @@ export default function ModalQR({ data, color, type = "production" }: ModalQRTyp
               </div>
             </div>
           </div>
+
         </div>
 
         <hr />
@@ -102,7 +112,9 @@ export default function ModalQR({ data, color, type = "production" }: ModalQRTyp
         {/* Footer */}
         <div className="flex justify-end gap-2 px-4 py-3">
           <PrimaryButton onClick={closeModalQR} style="outline">Close</PrimaryButton>
-          <PrimaryButton>Print</PrimaryButton>
+          <PrimaryButton onClick={() => {
+            handlePrint()
+          }}>Print</PrimaryButton>
         </div>
 
       </div>
