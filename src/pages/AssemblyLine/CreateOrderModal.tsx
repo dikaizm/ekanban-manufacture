@@ -61,6 +61,35 @@ function CreateOrderModal({ onClose }: CreateOrderModalType) {
     setPartNumberError('')
   }, [partNumber])
 
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const handleKeyDownOrder = (event: any) => {
+      if (event.key === 'Escape') {
+        onClose && onClose();
+      }
+    };
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const handleKeyDownQR = (event: any) => {
+      if (event.key === 'Escape') {
+        setStep(0);
+      }
+    }
+
+    if (step === 0) {
+      document.addEventListener('keydown', handleKeyDownOrder);
+    } else {
+      document.removeEventListener('keydown', handleKeyDownOrder);
+      document.addEventListener('keydown', handleKeyDownQR);
+    }
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      document.removeEventListener('keydown', handleKeyDownOrder);
+      document.removeEventListener('keydown', handleKeyDownQR);
+    };
+  }, [onClose, step]);
+
   return (
     <div className="absolute inset-0 z-50 flex items-center justify-center">
       <div className="absolute w-full h-full bg-black/30"></div>

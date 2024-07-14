@@ -1,3 +1,4 @@
+import { useEffect } from "react"
 import AuthenticatedLayout from "../../components/AuthenticatedLayout"
 import Breadcrumb from "../../components/Breadcrumb"
 import { KanbanColumn } from "../../components/Kanban"
@@ -16,6 +17,16 @@ const breadcrumbItems = [
 
 export default function KanbanPage() {
   const { isModalQRVisible, modalQRData } = useModalQR()
+
+  useEffect(() => {
+    if (isModalQRVisible) {
+      document.body.classList.add('no-scroll');
+    } else {
+      document.body.classList.remove('no-scroll');
+    }
+    // Cleanup function to remove the class when the component unmounts
+    return () => document.body.classList.remove('no-scroll');
+  }, [isModalQRVisible]);
 
   return (
     <>
@@ -89,6 +100,8 @@ export default function KanbanPage() {
       {isModalQRVisible && (
         <ModalQR
           data={modalQRData}
+          color="bg-green-300"
+          type="production"
         />
       )}
     </>
