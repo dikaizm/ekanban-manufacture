@@ -13,13 +13,14 @@ interface InputTextType {
         setValue: (value: string) => void
     },
     value?: string
+    required?: boolean
 }
 
-export default function InputText({ id, label, placeholder, type = 'text', onChange, icon, disabled = false, error, value }: InputTextType) {
+export default function InputText({ id, label, placeholder, type = 'text', onChange, icon, disabled = false, error, value, required }: InputTextType) {
 
     return (
         <div className="flex flex-col items-start w-full gap-1">
-            <label htmlFor={id}>{label}</label>
+            <label htmlFor={id} className="font-medium">{label}</label>
             <div className="relative w-full">
                 {icon && <div className="absolute w-5 h-5 pr-10 -translate-y-1/2 left-3 top-1/2">{icon}</div>}
                 <input value={value} className={"w-full p-2 border rounded-lg " + (disabled ? "bg-slate-100 " : " ") + (error?.value ? 'border-red-500' : 'border-gray-400 ')} type={type} id={id} onChange={(e) => {
@@ -29,7 +30,7 @@ export default function InputText({ id, label, placeholder, type = 'text', onCha
                     if (error?.value) {
                         error.setValue('')
                     }
-                }} placeholder={placeholder} disabled={disabled} />
+                }} placeholder={placeholder} disabled={disabled} required={required} />
             </div>
             {error?.value && <span className="text-xs text-red-500">{error.value}</span>}
         </div>

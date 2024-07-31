@@ -12,6 +12,7 @@ export const ACTIONS = {
         DELIVER: 'order_fabrication_deliver'
     },
     SHOP_FLOOR_FABRICATION: {
+        SET_PLAN: 'shop_floor_fabrication_set_plan',
         START: 'shop_floor_fabrication_start',
         FINISH: 'shop_floor_fabrication_finish'
     }

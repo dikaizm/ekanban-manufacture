@@ -39,7 +39,7 @@ function PartListImpl() {
   const { secureApi } = useSecureApi()
 
   const [parts, setParts] = useState<PartType[]>(PARTS)
-  const [partStatus, setPartStatus] = useState<string>("")
+  const [partStatus, setPartStatus] = useState<string>("No Status")
   const [isComplete, setIsComplete] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(true)
 

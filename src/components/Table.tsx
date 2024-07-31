@@ -74,51 +74,47 @@ function TableRow({ data, headKeys, actions }: TableRowType) {
     <>
       {data.map((item, index) => (
         <tr key={index} className="bg-white border-b hover:bg-gray-50">
-          <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+          <td className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">
             {index + 1}
           </td>
           {headKeys.map((key) => (
-            <td key={key} className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-              {item[key]}
+            <td key={key} className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">
+              {item[key] ? item[key] : '-'}
             </td>
           ))}
           {actions && (
-            <td className="flex gap-2 px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+            <td className="flex gap-2 px-6 py-3 font-medium text-gray-900 whitespace-nowrap">
               {actions.map((action, actionIndex) => {
-                switch (action.type) {
-                  case ACTIONS.ORDER_STORE.PRODUCTION:
-                    return (
-                      <TableActionBtn
-                        key={actionIndex}
-                        label={action.label}
-                        color={action.color}
-                        disabled={item.status !== 'pending'}
-                        onClick={() => action.onClick && action.onClick(item.id)}
-                      />
-                    );
-                  case (ACTIONS.ORDER_STORE.DELIVER):
-                    return (
-                      <TableActionBtn
-                        key={actionIndex}
-                        label={action.label}
-                        color={action.color}
-                        disabled={!(item.quantity <= item.stock && item.status === 'deliver')}
-                        onClick={() => action.onClick && action.onClick(item.id)}
-                      />
-                    );
-                  case (ACTIONS.PART_STORE.RECEIVE):
-                    return (
-                      <TableActionBtn
-                        key={actionIndex}
-                        label={action.label}
-                        color={action.color}
-                        disabled={item.status !== 'finish'}
-                        onClick={() => action.onClick && action.onClick(item.id)}
-                      />
-                    );
-                  default:
-                    return null;
-                }
+                const isDisabled = () => {
+                  switch (action.type) {
+                    case ACTIONS.ORDER_STORE.PRODUCTION:
+                      return item.status !== 'pending';
+                    case ACTIONS.ORDER_STORE.DELIVER:
+                      return !(item.quantity <= item.stock && item.status === 'deliver');
+                    case ACTIONS.PART_STORE.RECEIVE:
+                      return item.status !== 'finish';
+                    case ACTIONS.ORDER_FABRICATION.DELIVER:
+                      return item.status !== 'deliver';
+                    case ACTIONS.SHOP_FLOOR_FABRICATION.SET_PLAN:
+                      return item.status !== 'pending';
+                    case ACTIONS.SHOP_FLOOR_FABRICATION.START:
+                      return (item.status === 'in_progress' || item.status === 'finish') || !item.planStart || !item.planFinish;
+                    case ACTIONS.SHOP_FLOOR_FABRICATION.FINISH:
+                      return (item.status === 'finish' || item.status === 'pending') || !item.planStart || !item.planFinish;
+                    default:
+                      return false;
+                  }
+                };
+
+                return (
+                  <TableActionBtn
+                    key={actionIndex}
+                    label={action.label}
+                    color={action.color}
+                    disabled={isDisabled()}
+                    onClick={() => action.onClick && action.onClick(item.id)}
+                  />
+                );
               })}
             </td>
           )}
@@ -141,7 +137,7 @@ export function TableActionBtn({ label, color, disabled = false, onClick }: Tabl
   return (
     <button
       onClick={onClick}
-      className={`p-2 rounded-lg text-white hover:bg-opacity-80  ${disabled ? 'bg-gray-400' : color}`}
+      className={`p-2 rounded-lg text-white ${disabled ? 'bg-gray-400' : color + ' hover:bg-opacity-80'}`}
       disabled={disabled}
     >
       {label}

@@ -4,10 +4,13 @@ interface ModalContextType {
     isModalVisible: {
         [key: string]: boolean
         createOrder: boolean
+        setPlanShopFloor: boolean
     }
     openModal: {
-        [key: string]: () => void
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        [key: string]: (item: any) => void
         createOrder: () => void
+        setPlanShopFloor: (id: number) => void
     }
     closeModal: () => void
 }
