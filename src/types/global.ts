@@ -48,3 +48,13 @@ export interface OrderStoreType {
     createdAt?: string
     updatedAt?: string
 }
+
+export interface PartStoreType {
+    id: number
+    partNumber: string
+    partName: string
+    stock: number
+    status: "order_to_fabrication" | "finish"
+    createdAt?: string
+    updatedAt?: string
+}

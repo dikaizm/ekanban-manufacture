@@ -46,13 +46,16 @@ function OrderListImpl() {
     try {
       const response = await secureApi('/assembly-store/orders').then(res => res.json())
       
+      if (!response.success) {
+        toast.error(response.message)
+      }
+
       if (response.data) {
         setOrders(response.data)
       }
 
     } catch (error) {
       toast.error("Failed to fetch orders")
-      console.log(error)
     } finally {
       setIsLoading(false)
     }
@@ -60,7 +63,7 @@ function OrderListImpl() {
 
   useEffect(() => {
     fetchOrders()
-  }, [secureApi])
+  }, [])
 
   async function handleActionBtn(orderId: number, status: string) {
     try {

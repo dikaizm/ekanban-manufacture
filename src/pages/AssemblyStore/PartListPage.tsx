@@ -1,8 +1,14 @@
+import { useEffect, useState } from "react"
 import AuthenticatedLayout from "../../components/AuthenticatedLayout"
 import Breadcrumb from "../../components/Breadcrumb"
 import PrimaryButton from "../../components/PrimaryButton"
 import Table from "../../components/Table"
 import MainTitle from "../../components/Title/MainTitle"
+import { useSecureApi } from "../../provider/utils/secureApiContext"
+import { ACTIONS } from "../../types/const"
+import CircleLoading from "../../components/Loading"
+import toast from "react-hot-toast"
+import { PartStoreType } from "../../types/global"
 
 const breadcrumbItems = [
   {
@@ -13,26 +19,51 @@ const breadcrumbItems = [
   }
 ]
 
-const partHead = ["Part Number", "Part Name", "Stock", "Status"]
-
-const partBody = [
-  {
-    partNumber: "P001",
-    partName: "Screw",
-    stock: 100,
-    status: "Order to fabrication"
-  },
-  {
-    partNumber: "P002",
-    partName: "Bolt",
-    stock: 50,
-    status: "Order to fabrication"
-  }
-]
+const partHead = {
+  partNumber: "Part Number",
+  partName: "Part Name",
+  stock: "Stock",
+  status: "Status"
+}
 
 function PartListPage() {
   return (
     <AuthenticatedLayout>
+      <PartListImpl />
+    </AuthenticatedLayout>
+  )
+}
+
+function PartListImpl() {
+  const { secureApi } = useSecureApi()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [parts, setParts] = useState<PartStoreType[]>([])
+
+  const fetchParts = async () => {
+    try {
+      const response = await secureApi('/assembly-store/parts').then(res => res.json())
+
+      if (!response.success) {
+        toast.error(response.message)
+      }
+
+      if (response.data) {
+        setParts(response.data)
+      }
+
+    } catch (error) {
+      toast.error("Failed to fetch parts")
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchParts()
+  }, [])
+
+  return (
+    <>
       <Breadcrumb items={breadcrumbItems} />
 
       <div className="p-4 sm:p-6">
@@ -41,15 +72,22 @@ function PartListPage() {
           <PrimaryButton>Download</PrimaryButton>
         </div>
 
-        <Table head={partHead} body={partBody} actions={[
-          {
-            label: "Receive",
-            color: "bg-blue-500",
-            onClick: () => alert("Edit")
-          },
-        ]} />
+        {!isLoading ? (
+          <Table head={partHead} body={parts} actions={[
+            {
+              label: "Receive",
+              color: "bg-blue-500",
+              onClick: (partId) => {
+                console.log("Receive", partId)
+              },
+              type: ACTIONS.PART_STORE.RECEIVE
+            },
+          ]} />
+        ) : (
+          <CircleLoading />
+        )}
       </div>
-    </AuthenticatedLayout>
+    </>
   )
 }
 

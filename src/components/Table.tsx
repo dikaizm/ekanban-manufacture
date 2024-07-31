@@ -1,5 +1,6 @@
 import { ACTIONS } from "../types/const"
 import CircleLoading from "./Loading"
+import { FaBoxOpen } from "react-icons/fa6"
 
 interface ActionType {
   label: string
@@ -24,8 +25,9 @@ export default function Table({ head, body, actions }: TableType) {
   if (body.length === 0) {
     // Show empty message
     return (
-      <div className="mt-6 text-center text-gray-400">
-        Order list is empty
+      <div className="flex flex-col items-center gap-2 mt-8 text-center text-gray-400">
+        <FaBoxOpen className="w-12 h-12" />
+        <span>List is empty</span>
       </div>
     )
   }
@@ -68,14 +70,6 @@ interface TableRowType {
 }
 
 function TableRow({ data, headKeys, actions }: TableRowType) {
-  if (data.length === 0) {
-    return (
-      <tr>
-        <td colSpan={10} className="text-center">No data found</td>
-      </tr>
-    )
-  }
-
   return (
     <>
       {data.map((item, index) => (
@@ -109,6 +103,16 @@ function TableRow({ data, headKeys, actions }: TableRowType) {
                         label={action.label}
                         color={action.color}
                         disabled={!(item.quantity <= item.stock && item.status === 'deliver')}
+                        onClick={() => action.onClick && action.onClick(item.id)}
+                      />
+                    );
+                  case (ACTIONS.PART_STORE.RECEIVE):
+                    return (
+                      <TableActionBtn
+                        key={actionIndex}
+                        label={action.label}
+                        color={action.color}
+                        disabled={item.status !== 'finish'}
                         onClick={() => action.onClick && action.onClick(item.id)}
                       />
                     );
