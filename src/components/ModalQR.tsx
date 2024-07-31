@@ -8,12 +8,12 @@ import { useReactToPrint } from "react-to-print"
 
 interface ModalQRType {
   data?: QRKanbanCardType
-  color: string
   type?: "production" | "withdrawal"
 }
 
-export default function ModalQR({ data, color, type = "production" }: ModalQRType) {
+export default function ModalQR({ data, type = "production" }: ModalQRType) {
   const { closeModalQR } = useModalQR()
+  const color = type === "production" ? "bg-green-300" : "bg-yellow-300"
 
   const contentToPrint = useRef<HTMLDivElement>(null)
   const handlePrint = useReactToPrint({
@@ -94,7 +94,7 @@ export default function ModalQR({ data, color, type = "production" }: ModalQRTyp
 
             <div className="flex flex-col w-64 border-l border-slate-500">
               <div className="flex flex-col items-center p-4">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=HelloWorld" alt="QR Code" />
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=HelloWorld&format=svg" alt="QR Code" />
                 <span className="mt-3 text-sm">Scan to confirm</span>
               </div>
               <div className="bg-slate-500 h-[0.8pt]"></div>

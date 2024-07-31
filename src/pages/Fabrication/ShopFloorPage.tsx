@@ -13,7 +13,16 @@ const breadcrumbItems = [
   }
 ]
 
-const shopHead = ["Part Number", "Part Name", "Plan Start", "Plan Finish", "Actual Start", "Actual Finish", "Time Remaining", "Station"]
+const shopHead = {
+  partNumber: "Part Number",
+  partName: "Part Name",
+  planStart: "Plan Start",
+  planFinish: "Plan Finish",
+  actualStart: "Actual Start",
+  actualFinish: "Actual Finish",
+  timeRemaining: "Time Remaining",
+  station: "Station"
+}
 
 const shopBody = [
   {
@@ -50,6 +59,13 @@ function ShopFloorPage() {
         </div>
 
         <Table head={shopHead} body={shopBody} actions={[
+          {
+            label: "Start",
+            color: "bg-purple-500",
+            onClick: () => {
+              console.log("Start")
+            }
+          },
           {
             label: "Finish",
             color: "bg-green-500",

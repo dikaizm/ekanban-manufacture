@@ -1,8 +1,14 @@
+import { useEffect, useState } from "react"
 import AuthenticatedLayout from "../../components/AuthenticatedLayout"
 import Breadcrumb from "../../components/Breadcrumb"
 import PrimaryButton from "../../components/PrimaryButton"
 import Table from "../../components/Table"
 import MainTitle from "../../components/Title/MainTitle"
+import { OrderStoreType } from "../../types/global"
+import { useSecureApi } from "../../provider/utils/secureApiContext"
+import CircleLoading from "../../components/Loading"
+import toast from "react-hot-toast"
+import { ACTIONS } from "../../types/const"
 
 const breadcrumbItems = [
   {
@@ -13,32 +19,75 @@ const breadcrumbItems = [
   }
 ]
 
-const orderHead = ["Part Number", "Part Name", "Order ID", "Kanban ID", "Quantity", "Stock", "Status"]
-
-const orderBody = [
-  {
-    partNumber: "asdhasidha",
-    partName: "Part 1",
-    orderId: "123",
-    kanbanId: "K123",
-    quantity: 10,
-    stock: 20,
-    status: "Pending"
-  },
-  {
-    partNumber: "jabduyq",
-    partName: "Part 2",
-    orderId: "124",
-    kanbanId: "K124",
-    quantity: 20,
-    stock: 30,
-    status: "Completed"
-  }
-]
+const orderHead = {
+  partNumber: "Part Number",
+  partName: "Part Name",
+  orderId: "Order ID",
+  kanbanId: "Kanban ID",
+  quantity: "Quantity",
+  stock: "Stock",
+  status: "Status"
+}
 
 function OrderListPage() {
   return (
     <AuthenticatedLayout>
+      <OrderListImpl />
+    </AuthenticatedLayout>
+  )
+}
+
+function OrderListImpl() {
+  const { secureApi } = useSecureApi()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [orders, setOrders] = useState<OrderStoreType[]>([])
+
+  const fetchOrders = async () => {
+    try {
+      const response = await secureApi('/assembly-store/orders').then(res => res.json())
+      
+      if (response.data) {
+        setOrders(response.data)
+      }
+
+    } catch (error) {
+      toast.error("Failed to fetch orders")
+      console.log(error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchOrders()
+  }, [secureApi])
+
+  async function handleActionBtn(orderId: number, status: string) {
+    try {
+      const response = await secureApi('/assembly-store/orders/status', {
+        method: 'POST',
+        options: {
+          body: JSON.stringify({ id: orderId, status: status }),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      }).then(res => res.json())
+
+      if (response.success) {
+        toast.success(response.message)
+        fetchOrders()
+      } else {
+        toast.error(response.message)
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      toast.error(error.message)
+    }
+  }
+
+  return (
+    <>
       <Breadcrumb items={breadcrumbItems} />
 
       <div className="p-4 sm:p-6">
@@ -47,24 +96,30 @@ function OrderListPage() {
           <PrimaryButton>Download</PrimaryButton>
         </div>
 
-        <Table head={orderHead} body={orderBody} actions={[
-          {
-            label: "Production",
-            color: "bg-purple-500",
-            onClick: () => {
-              console.log("Production")
+        {!isLoading ? (
+          <Table head={orderHead} body={orders} actions={[
+            {
+              label: "Production",
+              color: "bg-purple-500",
+              onClick: (orderId) => {
+                handleActionBtn(orderId, "production")
+              },
+              type: ACTIONS.ORDER_STORE.PRODUCTION
+            },
+            {
+              label: "Deliver",
+              color: "bg-green-500",
+              onClick: (orderId) => {
+                handleActionBtn(orderId, "deliver")
+              },
+              type: ACTIONS.ORDER_STORE.DELIVER
             }
-          },
-          {
-            label: "Deliver",
-            color: "bg-green-500",
-            onClick: () => {
-              console.log("Deliver")
-            }
-          }
-        ]} />
+          ]} />
+        ) : (
+          <CircleLoading />
+        )}
       </div>
-    </AuthenticatedLayout>
+    </>
   )
 }
 

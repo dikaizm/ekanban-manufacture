@@ -1,5 +1,22 @@
 import { PartType } from "./global";
 
+export const ACTIONS = {
+    ORDER_STORE: {
+        PRODUCTION: 'order_store_production',
+        DELIVER: 'order_store_deliver'
+    },
+    PART_STORE: {
+        RECEIVE: 'part_store_receive',
+    },
+    ORDER_FABRICATION: {
+        DELIVER: 'order_fabrication_deliver'
+    },
+    SHOP_FLOOR_FABRICATION: {
+        START: 'shop_floor_fabrication_start',
+        FINISH: 'shop_floor_fabrication_finish'
+    }
+}
+
 export const PARTS: PartType[] = [
     {
         partNumber: 'V5745094220001',

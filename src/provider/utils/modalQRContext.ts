@@ -6,6 +6,7 @@ interface ModalQRContextType {
     openModalQR: (data?: QRKanbanCardType) => void
     closeModalQR: () => void
     modalQRData?: QRKanbanCardType
+    modalQRType?: "production" | "withdrawal"
 }
 
 export const ModalQRContext = createContext<ModalQRContextType | undefined>(undefined)

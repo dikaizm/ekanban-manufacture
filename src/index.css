@@ -48,27 +48,13 @@ input[type="number"] {
   }
 }
 
+.toaster-wrapper > div {
+  display: none !important;
+}
+.toaster-wrapper > div:nth-child(-n + 3) {
+  display: flex !important;
+}
+
 .no-scroll {
   overflow: hidden;
-}
-
-.react-kanban-column {
-  background-color: orange;
-}
-
-.react-kanban-card {
-  background-color: purple;
-  color: yellow;
-}
-
-.react-kanban-card__title {
-  font-size: large;
-  text-decoration: underline;
-  font-style: italic;
-}
-
-.react-kanban-card--dragging {
-  transform: rotate(90deg);
-  background-color: yellow;
-  color: purple;
 }

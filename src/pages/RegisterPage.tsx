@@ -1,21 +1,29 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from "react"
+import Cookies from "js-cookie"
+import { ChangeEvent, useState } from "react"
 import { MdEmail, MdLock, MdPerson } from "react-icons/md"
 import InputText from "../components/Input/InputText"
 // import appConfig from "../config/env"
 import { useNavigate } from "react-router-dom"
 import AppLogo from "../components/AppLogo"
+import appConfig from "../config/env"
+import SelectInput from "../components/Input/InputSelect"
 
 export default function RegisterPage() {
   const [name, setName] = useState<string>('')
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [confirmPassword, setConfirmPassword] = useState<string>('')
+  const [role, setRole] = useState<string>('')
+  const [registerKey, setRegisterKey] = useState<string>('')
 
   // error state
   const [nameError, setNameError] = useState<string>('')
   const [emailError, setEmailError] = useState<string>('')
   const [passwordError, setPasswordError] = useState<string>('')
   const [confirmPasswordError, setConfirmPasswordError] = useState<string>('')
+  const [roleError, setRoleError] = useState<string>('')
+  const [registerKeyError, setRegisterKeyError] = useState<string>('')
+  const [registerError, setRegisterError] = useState<string>('')
 
   const navigate = useNavigate()
 
@@ -35,42 +43,50 @@ export default function RegisterPage() {
     setConfirmPassword(event.target.value)
   }
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleRegisterKey(event: ChangeEvent<HTMLInputElement>) {
+    setRegisterKey(event.target.value)
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async function handleSubmit(event: any) {
     event.preventDefault()
 
     if (!name) setNameError('Nama tidak boleh kosong')
     if (!email) setEmailError('Email tidak boleh kosong')
     if (password.length < 6) setPasswordError('Password minimal 6 karakter')
     if (password !== confirmPassword) setConfirmPasswordError('Password tidak sama')
-    if (!name || !email || password.length < 6 || password !== confirmPassword) return
+    if (!registerKey) setRegisterKeyError('Register key tidak boleh kosong')
+    if (!name || !email || password.length < 6 || password !== confirmPassword || !registerKey) return
 
-    return navigate('/')
+    const registerData = { name, email, role, password, confirmPassword, registerKey }
 
-    // try {
-    //   const response = await fetch(`${appConfig.apiUrl}/api/auth/login`, {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify({ email, password })
-    //   }).then(res => {
-    //     if (res.ok) return res.json()
+    try {
+      const response = await fetch(`${appConfig.apiUrl}/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(registerData)
+      }).then(async res => {
+        return { status: res.status, data: await res.json() }
+      })
 
-    //     throw new Error('Login failed')
-    //   })
+      console.log(response);
+      if (response.status !== 201) {
+        setRegisterError(response.data.message)
+        return;
+      }
 
-    //   console.log(response)
+      // Save response data to cookies
+      Cookies.set('user', btoa(JSON.stringify(response.data.data.user)))
+      Cookies.set('auth', response.data.data.token, { expires: 30 })
 
-    //   return navigate('/dashboard')
+      return navigate('/')
 
-    // } catch (error) {
-    //   console.error(error)
-    // }
+    } catch (error) {
+      console.error(error)
+    }
   }
-
-  useEffect(() => {
-
-  }, [password, confirmPassword])
 
   return (
     <main className="relative flex flex-col justify-between min-h-screen mx-auto bg-slate-50">
@@ -96,17 +112,32 @@ export default function RegisterPage() {
             <InputText id="name" label="Full Name" placeholder="Full Name" value={name} onChange={handleName} icon={<MdPerson className="w-full h-full" />}
               error={{ value: nameError, setValue: setNameError }}
             />
-            <InputText id="email" label="Username" placeholder="Input your username" value={email} onChange={handleEmail} icon={<MdEmail className="w-full h-full" />}
+            <InputText id="email" label="Email" placeholder="Input your email" type="email" value={email} onChange={handleEmail} icon={<MdEmail className="w-full h-full" />}
               error={{ value: emailError, setValue: setEmailError }}
             />
+
+            <SelectInput id="role" label="Role" value={role} onChange={(e) => {
+              setRole(e.target.value)
+            }} icon={<MdPerson className="w-full h-full" />} options={
+              [
+                { value: 'manager', label: 'Manager' },
+                { value: 'assembly_line_operator', label: 'Assembly Line Operator' },
+                { value: 'assembly_store_operator', label: 'Assembly Store Operator' },
+                { value: 'fabrication_operator', label: 'Fabrication Operator' },
+              ]
+            } error={{ value: roleError, setValue: setRoleError }} />
+
             <InputText id="password" label="Password" placeholder="Input your password" type="password" value={password} onChange={handlePassword} icon={<MdLock className="w-full h-full" />}
               error={{ value: passwordError, setValue: setPasswordError }}
             />
-            <InputText id="password" label="Confirm Password" placeholder="Input the same password" type="password" value={confirmPassword} onChange={handleConfirmPassword} icon={<MdLock className="w-full h-full" />}
+            <InputText id="confirm_password" label="Confirm Password" placeholder="Input the same password" type="password" value={confirmPassword} onChange={handleConfirmPassword} icon={<MdLock className="w-full h-full" />}
               error={{ value: confirmPasswordError, setValue: setConfirmPasswordError }}
             />
 
-            <button type="submit" className="p-2 text-white bg-blue-500 rounded-lg">Register</button>
+            <InputText id="register_key" label="Register Key" placeholder="Input register key" type="password" value={registerKey} onChange={handleRegisterKey} icon={<MdLock className="w-full h-full" />} error={{ value: registerKeyError, setValue: setRegisterKeyError }} />
+
+            <button type="button" className="p-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600">Register</button>
+            {registerError && <span className="text-xs text-red-500">{registerError}</span>}
           </form>
 
         </div>

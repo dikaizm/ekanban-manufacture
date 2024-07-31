@@ -7,10 +7,13 @@ import { useState } from 'react'
 import { FaPerson } from 'react-icons/fa6'
 import { useNavigate } from 'react-router-dom'
 import { useToggleSidebar } from '../provider/utils/sidebarContext'
+import { UserType } from '../types/global'
+import Cookies from 'js-cookie'
 
 export default function Topbar() {
   const [isProfilOpen, setIsProfilOpen] = useState<boolean>(false)
   const { isSidebarOpen, toggleSidebar } = useToggleSidebar()
+  const [user, setUser] = useState<UserType>({ name: '', email: '', role: '' })
 
   const profileRef = useRef<HTMLDivElement>(null)
 
@@ -23,6 +26,13 @@ export default function Topbar() {
     event.preventDefault()
     toggleSidebar(!isSidebarOpen)
   }
+
+  useEffect(() => {
+    // Load user data from localStorage
+    const userData = localStorage.getItem('user')
+    if (!userData) return
+    setUser(JSON.parse(userData))
+  }, [])
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -51,22 +61,25 @@ export default function Topbar() {
 
       <section ref={profileRef} className='relative'>
         <button type="button" onClick={handleProfileClick} className={'flex items-center gap-2 p-2 border rounded-full  hover:bg-slate-200 ' + (isProfilOpen ? 'bg-slate-200' : 'border-slate-300')}>
-          <span className='hidden text-sm font-semibold sm:block'>John Doe</span>
+          <span className='hidden text-sm font-semibold sm:block'>{user.name}</span>
           <BsPersonCircle className='w-6 h-6' />
         </button>
 
-        <ProfileDropdown isOpen={isProfilOpen} />
+        <ProfileDropdown isOpen={isProfilOpen} user={user} />
       </section>
     </header>
   )
 }
 
-function ProfileDropdown({ isOpen }: { isOpen: boolean }) {
+function ProfileDropdown({ isOpen, user }: { isOpen: boolean, user: UserType }) {
   const navigate = useNavigate()
 
   function handleLogout(event: MouseEvent<HTMLButtonElement>) {
     event.preventDefault()
     localStorage.removeItem('sidebar')
+    localStorage.removeItem('sidebarSubitem')
+    localStorage.removeItem('user')
+    Cookies.remove('auth')
     navigate('/login')
   }
 
@@ -75,8 +88,8 @@ function ProfileDropdown({ isOpen }: { isOpen: boolean }) {
       <div className='flex items-center gap-3 p-2'>
         <BsPersonCircle className='w-8 h-8' />
         <div>
-          <p className='text-sm font-semibold'>John Doe</p>
-          <p className='text-xs text-slate-400'>test@mail.com</p>
+          <p className='text-sm font-semibold'>{user.name}</p>
+          <p className='text-xs text-slate-400'>{user.email}</p>
         </div>
       </div>
 
@@ -85,7 +98,7 @@ function ProfileDropdown({ isOpen }: { isOpen: boolean }) {
           <div className='p-1 bg-white rounded-full w-7 h-7'>
             <FaPerson className='w-full h-full text-slate-500' />
           </div>
-          <p className='text-xs font-medium'>Administrator</p>
+          <p className='text-xs font-medium'>{getRole(user.role)}</p>
         </div>
 
         <hr className='border-slate-200' />
@@ -97,4 +110,19 @@ function ProfileDropdown({ isOpen }: { isOpen: boolean }) {
       </div>
     </div>
   )
+}
+
+function getRole(role: string) {
+  switch (role) {
+    case 'manager':
+      return 'Manager'
+    case 'assembly_line_operator':
+      return 'Assembly Line Operator'
+    case 'assembly_store_operator':
+      return 'Assembly Store Operator'
+    case 'fabrication_operator':
+      return 'Fabrication Operator'
+    default:
+      return 'Unknown'
+  }
 }

@@ -16,7 +16,7 @@ const breadcrumbItems = [
 ]
 
 export default function KanbanPage() {
-  const { isModalQRVisible, modalQRData } = useModalQR()
+  const { isModalQRVisible, modalQRData, modalQRType } = useModalQR()
 
   useEffect(() => {
     if (isModalQRVisible) {
@@ -73,7 +73,7 @@ export default function KanbanPage() {
                 plannedStart: "2021-09-02",
                 status: "queue"
               }
-            ]} type={"production"} />
+            ]} type={"withdrawal"} />
 
             <KanbanColumn title="Done" color="bg-green-500" parts={[
               {
@@ -92,7 +92,7 @@ export default function KanbanPage() {
                 plannedStart: "2021-09-02",
                 status: "queue"
               }
-            ]} type={"production"} />
+            ]} type={"withdrawal"} />
           </div>
         </div>
       </AuthenticatedLayout>
@@ -100,8 +100,7 @@ export default function KanbanPage() {
       {isModalQRVisible && (
         <ModalQR
           data={modalQRData}
-          color="bg-green-300"
-          type="production"
+          type={modalQRType}
         />
       )}
     </>

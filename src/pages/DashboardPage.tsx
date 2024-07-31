@@ -17,9 +17,9 @@ export default function DashboardPage() {
           <div className="w-full p-5 bg-white border rounded-lg">
             <CardTitle>Progress Track</CardTitle>
             <div className="flex flex-col gap-8 mt-4">
-              <ProgressItem title="Task 1" progress={50} icon={<RiTableFill className="w-full h-full" />} />
-              <ProgressItem title="Task 2" progress={30} icon={<RiTableFill className="w-full h-full" />} />
-              <ProgressItem title="Task 3" progress={70} icon={<RiTableFill className="w-full h-full" />} />
+              <ProgressItem title="Assembly Line" progress={50} icon={<RiTableFill className="w-full h-full" />} />
+              <ProgressItem title="Assembly Store" progress={30} icon={<RiTableFill className="w-full h-full" />} />
+              <ProgressItem title="Fabrication" progress={70} icon={<RiTableFill className="w-full h-full" />} />
             </div>
           </div>
 

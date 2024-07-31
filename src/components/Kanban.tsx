@@ -55,7 +55,7 @@ function KanbanCard({ part, color = "bg-red-500", type }: KanbanCardType) {
                     <hr />
                     <CardRow label="Quantity" value={part.quantity.toString()} />
                     <hr />
-                    <CardRow label="Planned Start" value={part.plannedStart} />
+                    <CardRow label="Plan Start" value={part.plannedStart} />
                 </div>
             </div>
         </button>

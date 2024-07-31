@@ -13,7 +13,12 @@ const breadcrumbItems = [
   }
 ]
 
-const orderHead = ["Part Number", "Part Name", "Kanban ID", "Status"]
+const orderHead = {
+  partNumber: "Part Number",
+  partName: "Part Name",
+  kanbanId: "Kanban ID",
+  status: "Status"
+}
 
 const orderBody = [
   {

@@ -1,5 +1,5 @@
 import Cookies from "js-cookie"
-import { ChangeEvent, FormEvent, useState } from "react"
+import { ChangeEvent, FormEvent, useEffect, useState } from "react"
 import { MdEmail, MdLock } from "react-icons/md"
 import InputText from "../components/Input/InputText"
 // import appConfig from "../config/env"
@@ -8,6 +8,15 @@ import AppLogo from "../components/AppLogo"
 import appConfig from "../config/env"
 
 export default function LoginPage() {
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const authToken = Cookies.get('auth')
+    if (authToken) {
+      return navigate('/dashboard')
+    }
+  }, [navigate])
+
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [remember, setRemember] = useState<boolean>(false)
@@ -16,8 +25,6 @@ export default function LoginPage() {
   const [emailError, setEmailError] = useState<string>('')
   const [passwordError, setPasswordError] = useState<string>('')
   const [loginError, setLoginError] = useState<string>('')
-
-  const navigate = useNavigate()
 
   function handleEmail(event: ChangeEvent<HTMLInputElement>) {
     setEmail(event.target.value)
@@ -45,18 +52,17 @@ export default function LoginPage() {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ email, password })
-      }).then(async res => {
-        return { status: res.status, data: await res.json() }
-      })
+      }).then(res => res.json())
 
-      console.log(response);
-      if (response.status !== 200) {
-        setLoginError(response.data.message)
+      if (!response.success) {
+        setLoginError(response.message)
         return;
       }
-      
+
+      // Save user to localStorage
+      localStorage.setItem('user', JSON.stringify(response.data.user))
       // Save token to cookie
-      Cookies.set('auth', response.data.data.token, { expires: remember ? 365 : 1 })
+      Cookies.set('auth', response.data.token, { expires: remember ? 30 : 3 })
 
       return navigate('/dashboard')
 
@@ -85,7 +91,7 @@ export default function LoginPage() {
           </div>
 
           <form className="flex flex-col gap-4 mt-6" onSubmit={handleSubmit}>
-            <InputText id="email" label="Username" placeholder="Input your username" onChange={handleEmail} icon={<MdEmail className="w-full h-full" />}
+            <InputText id="email" label="Email" placeholder="Input your email" onChange={handleEmail} icon={<MdEmail className="w-full h-full" />}
               error={{ value: emailError, setValue: setEmailError }}
             />
             <InputText id="password" label="Password" placeholder="Input your password" type="password" onChange={handlePassword} icon={<MdLock className="w-full h-full" />}

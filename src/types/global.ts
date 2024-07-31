@@ -1,7 +1,11 @@
 export type PartType = {
+    id?: number
     partNumber: string
     partName: string
     quantity?: number
+    quantityReq?: number
+    createdAt?: string
+    updatedAt?: string
 }
 
 export type PartKanbanType = {
@@ -24,4 +28,23 @@ export type QRKanbanCardType = {
     quantity: number
     previousProcess?: string
     nextProcess?: string
+}
+
+export interface UserType {
+    name: string
+    email: string
+    role: string
+}
+
+export interface OrderStoreType {
+    id: number
+    orderId: number
+    kanbanId: string
+    partNumber: string
+    partName: string
+    quantity: number
+    stock: number
+    status: "pending" | "production" | "deliver" | "finish"
+    createdAt?: string
+    updatedAt?: string
 }

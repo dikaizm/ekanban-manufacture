@@ -16,7 +16,7 @@ const breadcrumbItems = [
 ]
 
 export default function KanbanPage() {
-  const { isModalQRVisible, modalQRData } = useModalQR()
+  const { isModalQRVisible, modalQRData, modalQRType } = useModalQR()
 
   useEffect(() => {
     if (isModalQRVisible) {
@@ -100,8 +100,7 @@ export default function KanbanPage() {
       {isModalQRVisible && (
         <ModalQR
           data={modalQRData}
-          color="bg-yellow-300"
-          type="withdrawal"
+          type={modalQRType}
         />
       )}
     </>

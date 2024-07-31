@@ -1,10 +1,13 @@
-import { MouseEvent, ReactNode, useState } from 'react'
+import { MouseEvent, ReactNode, useEffect, useState } from 'react'
 import { BiSolidFactory } from 'react-icons/bi'
 import { GoHomeFill } from 'react-icons/go'
 import { RiDatabase2Fill } from 'react-icons/ri'
 import { useToggleSidebar } from '../provider/utils/sidebarContext'
 import { useNavigate } from 'react-router-dom'
 import { TiArrowSortedDown, TiArrowSortedUp } from 'react-icons/ti'
+import { UserType } from '../types/global'
+import PrimaryButton from './PrimaryButton'
+import { useModal } from '../provider/utils/modalContext'
 
 interface SubitemOpenType {
   [key: string]: boolean
@@ -15,89 +18,115 @@ interface SubitemOpenType {
 
 export default function Sidebar() {
   const { isSidebarOpen } = useToggleSidebar()
+  const { openModal } = useModal()
+
   const [isSubitemOpen, setIsSubitemOpen] = useState<SubitemOpenType>(JSON.parse(localStorage.getItem('sidebarSubitem')!))
+  const [user, setUser] = useState<UserType>({ name: '', email: '', role: '' })
+
+  useEffect(() => {
+    // Load user data from localStorage
+    const userData = localStorage.getItem('user')
+    if (!userData) return
+    setUser(JSON.parse(userData))
+  }, [])
 
   return (
     <aside className={'fixed z-40 flex flex-col justify-between  min-h-screen p-3 transition-transform duration-200 pt-20 bg-white border-r ' + (isSidebarOpen ? 'w-[14rem]' : 'hidden sm:block w-[4.5rem]')}>
       <section className='flex flex-col gap-1'>
         <MenuItem link="/dashboard" icon={<GoHomeFill className='w-6 h-6' />}>Dashboard</MenuItem>
-        <MenuItem link="/dashboard/assembly-line" icon={<BiSolidFactory className='w-6 h-6' />} subitems={
-          {
-            element: (
-              <>
-                <MenuSubItem link="/dashboard/assembly-line/order">Order List</MenuSubItem>
-                <MenuSubItem link="/dashboard/assembly-line/part">Part List</MenuSubItem>
-                <MenuSubItem link="/dashboard/assembly-line/kanban">Kanban Board</MenuSubItem>
-              </>
-            ),
-            state: {
-              value: isSubitemOpen.assemblyLine,
-              setValue: (value: boolean) => {
-                const subitemState = { ...isSubitemOpen };
 
-                for (const key in isSubitemOpen) {
-                  if (key !== 'assemblyLine') {
-                    subitemState[key] = false
+        {(user.role === 'manager' || user.role === 'assembly_line_operator') && (
+          <MenuItem link="/dashboard/assembly-line" icon={<BiSolidFactory className='w-6 h-6' />} subitems={
+            {
+              element: (
+                <>
+                  {/* <MenuSubItem link="/dashboard/assembly-line/order">Order List</MenuSubItem> */}
+                  <div className='p-2 ml-6 text-sm whitespace-nowrap'>
+                    <PrimaryButton onClick={(event) => {
+                      event.stopPropagation()
+                      openModal.createOrder()
+                    }}>Create Order</PrimaryButton>
+                  </div>
+                  <MenuSubItem link="/dashboard/assembly-line/part">Part List</MenuSubItem>
+                  <MenuSubItem link="/dashboard/assembly-line/kanban">Kanban Board</MenuSubItem>
+                </>
+              ),
+              state: {
+                value: isSubitemOpen.assemblyLine,
+                setValue: (value: boolean) => {
+                  const subitemState = { ...isSubitemOpen };
+
+                  for (const key in isSubitemOpen) {
+                    if (key !== 'assemblyLine') {
+                      subitemState[key] = false
+                    }
                   }
-                }
 
-                localStorage.setItem('sidebarSubitem', JSON.stringify({ ...subitemState, 'assemblyLine': value }))
-                setIsSubitemOpen({ ...subitemState, 'assemblyLine': value })
+                  localStorage.setItem('sidebarSubitem', JSON.stringify({ ...subitemState, 'assemblyLine': value }))
+                  setIsSubitemOpen({ ...subitemState, 'assemblyLine': value })
+                }
               }
             }
-          }
-        }>Assembly Line</MenuItem>
-        <MenuItem link="/dashboard/result" icon={<RiDatabase2Fill className='w-6 h-6' />} subitems={
-          {
-            element: (
-              <>
-                <MenuSubItem link="/dashboard/assembly-store/order">Order List</MenuSubItem>
-                <MenuSubItem link="/dashboard/assembly-store/part">Part List</MenuSubItem>
-              </>
-            ),
-            state: {
-              value: isSubitemOpen.assemblyStore,
-              setValue: (value: boolean) => {
-                const subitemState = { ...isSubitemOpen };
+          }>Assembly Line</MenuItem>
+        )}
 
-                for (const key in isSubitemOpen) {
-                  if (key !== 'assemblyStore') {
-                    subitemState[key] = false
+        {(user.role === 'manager' || user.role === 'assembly_store_operator') && (
+          <MenuItem link="/dashboard/assembly-store" icon={<RiDatabase2Fill className='w-6 h-6' />} subitems={
+            {
+              element: (
+                <>
+                  <MenuSubItem link="/dashboard/assembly-store/order">Order List</MenuSubItem>
+                  <MenuSubItem link="/dashboard/assembly-store/part">Part List</MenuSubItem>
+                </>
+              ),
+              state: {
+                value: isSubitemOpen.assemblyStore,
+                setValue: (value: boolean) => {
+                  const subitemState = { ...isSubitemOpen };
+
+                  for (const key in isSubitemOpen) {
+                    if (key !== 'assemblyStore') {
+                      subitemState[key] = false
+                    }
                   }
-                }
 
-                localStorage.setItem('sidebarSubitem', JSON.stringify({ ...subitemState, 'assemblyStore': value }))
-                setIsSubitemOpen({ ...subitemState, 'assemblyStore': value })
+                  localStorage.setItem('sidebarSubitem', JSON.stringify({ ...subitemState, 'assemblyStore': value }))
+                  setIsSubitemOpen({ ...subitemState, 'assemblyStore': value })
+                }
               }
             }
-          }
-        }>Assembly Store</MenuItem>
-        <MenuItem link="/dashboard/result" icon={<RiDatabase2Fill className='w-6 h-6' />} subitems={
-          {
-            element: (
-              <>
-                <MenuSubItem link="/dashboard/fabrication/order">Order List</MenuSubItem>
-                <MenuSubItem link="/dashboard/fabrication/shop-floor">Shop Floor</MenuSubItem>
-                <MenuSubItem link="/dashboard/fabrication/kanban">Kanban Board</MenuSubItem>
-              </>
-            ),
-            state: {
-              value: isSubitemOpen.fabrication,
-              setValue: (value: boolean) => {
-                const subitemState = { ...isSubitemOpen };
+          }>Assembly Store</MenuItem>
+        )}
 
-                for (const key in isSubitemOpen) {
-                  if (key !== 'fabrication') {
-                    subitemState[key] = false
+        {(user.role === 'manager' || user.role === 'fabrication_operator') && (
+          <MenuItem link="/dashboard/fabrication" icon={<RiDatabase2Fill className='w-6 h-6' />} subitems={
+            {
+              element: (
+                <>
+                  <MenuSubItem link="/dashboard/fabrication/order">Order List</MenuSubItem>
+                  <MenuSubItem link="/dashboard/fabrication/shop-floor">Shop Floor</MenuSubItem>
+                  <MenuSubItem link="/dashboard/fabrication/kanban">Kanban Board</MenuSubItem>
+                </>
+              ),
+              state: {
+                value: isSubitemOpen.fabrication,
+                setValue: (value: boolean) => {
+                  const subitemState = { ...isSubitemOpen };
+
+                  for (const key in isSubitemOpen) {
+                    if (key !== 'fabrication') {
+                      subitemState[key] = false
+                    }
                   }
-                }
 
-                localStorage.setItem('sidebarSubitem', JSON.stringify({ ...subitemState, 'fabrication': value }))
-                setIsSubitemOpen({ ...subitemState, 'fabrication': value })
+                  localStorage.setItem('sidebarSubitem', JSON.stringify({ ...subitemState, 'fabrication': value }))
+                  setIsSubitemOpen({ ...subitemState, 'fabrication': value })
+                }
               }
             }
-          }
-        }>Fabrication</MenuItem>
+          }>Fabrication</MenuItem>
+        )}
+
       </section>
 
       {isSidebarOpen && (
@@ -122,7 +151,7 @@ interface MenuItemType {
   }
 }
 
-function isActive(currentPath:string, path: string) {
+function isActive(currentPath: string, path: string) {
   if (currentPath === path) return 'bg-slate-100 hover:bg-slate-200 '
   else return 'hover:bg-slate-100 '
 }
