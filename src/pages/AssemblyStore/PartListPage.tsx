@@ -62,6 +62,29 @@ function PartListImpl() {
     fetchParts()
   }, [])
 
+  async function handleAction(id: number, status: string) {
+    try {
+      const response = await secureApi('/assembly-store/parts/status', {
+        method: "PUT",
+        options: {
+          body: JSON.stringify({ id, status }),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      }).then(res => res.json())
+
+      if (!response.success) {
+        toast.error(response.message)
+      } else {
+        toast.success(response.message)
+        fetchParts()
+      }
+    } catch (error) {
+      toast.error("Failed to update part status")
+    }
+  }
+
   return (
     <>
       <Breadcrumb items={breadcrumbItems} />
@@ -78,7 +101,7 @@ function PartListImpl() {
               label: "Receive",
               color: "bg-blue-500",
               onClick: (partId) => {
-                console.log("Receive", partId)
+                handleAction(partId, "idle")
               },
               type: ACTIONS.PART_STORE.RECEIVE
             },

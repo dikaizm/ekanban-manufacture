@@ -92,7 +92,7 @@ function TableRow({ data, headKeys, actions }: TableRowType) {
                     case ACTIONS.ORDER_STORE.DELIVER:
                       return !(item.quantity <= item.stock && item.status === 'deliver');
                     case ACTIONS.PART_STORE.RECEIVE:
-                      return item.status !== 'finish';
+                      return !(item.status === 'receive');
                     case ACTIONS.ORDER_FABRICATION.DELIVER:
                       return item.status !== 'deliver';
                     case ACTIONS.SHOP_FLOOR_FABRICATION.SET_PLAN:
