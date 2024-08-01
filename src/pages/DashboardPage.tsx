@@ -8,6 +8,7 @@ import ChartDataLabels from 'chartjs-plugin-datalabels'
 import { useSecureApi } from "../provider/utils/secureApiContext"
 import toast from "react-hot-toast"
 import { useNavigate } from "react-router-dom"
+import { FaBoxOpen } from "react-icons/fa6"
 
 Chartjs.register(ArcElement, Tooltip, Legend, ChartDataLabels)
 
@@ -80,10 +81,12 @@ function DashboardImpl() {
         return
       }
 
-      // Calculate percentage
-      const delay = Math.floor((response.data.delayQuantity / response.data.totalQuantity) * 100)
+      if (response.data) {
+        // Calculate percentage
+        const delay = Math.floor((response.data.delayQuantity / response.data.totalQuantity) * 100)
 
-      setDelayOntime({ delay, ontime: 100 - delay })
+        setDelayOntime({ delay, ontime: 100 - delay })
+      }
 
     } catch (error) {
       toast.error('Failed to fetch delay ontime data')
@@ -114,46 +117,53 @@ function DashboardImpl() {
 
           <div className="flex justify-center w-full mt-3">
             <div className="w-[13rem] md:w-56 sm:w-64">
-              <Doughnut
-                data={{
-                  labels: ['Delay', 'On-Time'],
-                  datasets: [
-                    {
-                      data: [delayOntime.delay, delayOntime.ontime],
-                      backgroundColor: [
-                        'rgb(255, 178, 44)',
-                        'rgb(54, 162, 235)',
-                      ],
-                      borderWidth: 1,
-                    },
-                  ]
-                }}
-                options={{
-                  responsive: true,
-                  maintainAspectRatio: true,
-                  plugins: {
-                    legend: {
-                      position: 'bottom',
-                    },
-                    tooltip: {
-                      enabled: true,
-                      callbacks: {
-                        label: function (data) {
-                          const label = data.label;
-                          const value = data.dataset.data[data.dataIndex];
-                          return `${label}: ${value}%`;
-                        }
+              {delayOntime.delay !== 0 && delayOntime.ontime !== 0 ? (
+                <Doughnut
+                  data={{
+                    labels: ['Delay', 'On-Time'],
+                    datasets: [
+                      {
+                        data: [delayOntime.delay, delayOntime.ontime],
+                        backgroundColor: [
+                          'rgb(255, 178, 44)',
+                          'rgb(54, 162, 235)',
+                        ],
+                        borderWidth: 1,
                       },
-                    },
-                    datalabels: {
-                      color: '#fff',
-                      formatter: function (value) {
-                        return `${value}%`;
+                    ]
+                  }}
+                  options={{
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                      legend: {
+                        position: 'bottom',
+                      },
+                      tooltip: {
+                        enabled: true,
+                        callbacks: {
+                          label: function (data) {
+                            const label = data.label;
+                            const value = data.dataset.data[data.dataIndex];
+                            return `${label}: ${value}%`;
+                          }
+                        },
+                      },
+                      datalabels: {
+                        color: '#fff',
+                        formatter: function (value) {
+                          return `${value}%`;
+                        }
                       }
-                    }
-                  },
-                }}
-              />
+                    },
+                  }}
+                />
+              ) : (
+                <div className="flex flex-col items-center gap-2 mt-12 text-center text-gray-400">
+                  <FaBoxOpen className="w-12 h-12" />
+                  <span>No data</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -169,28 +179,36 @@ function DashboardImpl() {
           </div>
 
           <div className="relative mt-4 overflow-x-auto max-h-[32rem]">
-            <table className="w-full text-sm text-left text-gray-500 rtl:text-right">
-              <thead className="text-xs text-gray-700 uppercase bg-slate-100">
-                <tr>
-                  <th scope="col" className="px-6 py-3">
-                    #
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Part Number
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Part Name
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Station
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <TableRow data={productionProgress} />
-              </tbody>
-            </table>
+            {productionProgress.length > 0 ? (
+              <table className="w-full text-sm text-left text-gray-500 rtl:text-right">
+                <thead className="text-xs text-gray-700 uppercase bg-slate-100">
+                  <tr>
+                    <th scope="col" className="px-6 py-3">
+                      #
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Part Number
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Part Name
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Station
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <TableRow data={productionProgress} />
+                </tbody>
+              </table>
+            ) : (
+              <div className="flex flex-col items-center gap-2 pb-6 text-center text-gray-400">
+                <FaBoxOpen className="w-12 h-12" />
+                <span>Production progress is empty</span>
+              </div>
+            )}
           </div>
+
         </div>
       </section>
     </div>
