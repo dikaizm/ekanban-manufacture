@@ -7,6 +7,7 @@ import { Chart as Chartjs, ArcElement, Tooltip, Legend } from 'chart.js'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
 import { useSecureApi } from "../provider/utils/secureApiContext"
 import toast from "react-hot-toast"
+import { useNavigate } from "react-router-dom"
 
 Chartjs.register(ArcElement, Tooltip, Legend, ChartDataLabels)
 
@@ -26,10 +27,18 @@ type ProgressTrackType = {
 
 type DelayOntimeType = { delay: number, ontime: number }
 
+type ProductionProgressType = {
+  partNumber: string;
+  partName: string;
+  station: string;
+}
+
 function DashboardImpl() {
+  const navigate = useNavigate()
   const { secureApi } = useSecureApi()
   const [progressTrack, setProgressTrack] = useState<ProgressTrackType>({ assemblyLine: 0, assemblyStore: 0, fabrication: 0 })
   const [delayOntime, setDelayOntime] = useState<DelayOntimeType>({ delay: 0, ontime: 0 })
+  const [productionProgress, setProductionProgress] = useState<ProductionProgressType[]>([])
 
   async function fetchProgressTrack() {
     try {
@@ -37,6 +46,7 @@ function DashboardImpl() {
 
       if (!response.success) {
         toast.error(response.message)
+        return
       }
       setProgressTrack(response.data)
 
@@ -47,7 +57,18 @@ function DashboardImpl() {
   }
 
   async function fetchProductionProgress() {
+    try {
+      const response = await secureApi('/stats/production-progress').then(res => res.json())
+      if (!response.success) {
+        toast.error('Failed to fetch production progress data')
+        return
+      }
 
+      setProductionProgress(response.data)
+
+    } catch (error) {
+      toast.error('Failed to fetch production progress data')
+    }
   }
 
   async function fetchDelayOntime() {
@@ -56,6 +77,7 @@ function DashboardImpl() {
 
       if (!response.success) {
         toast.error(response.message)
+        return
       }
 
       // Calculate percentage
@@ -141,10 +163,12 @@ function DashboardImpl() {
         <div className="w-full overflow-hidden bg-white border rounded-lg">
           <div className="flex items-center justify-between px-5 pt-4">
             <CardTitle>Production Progress</CardTitle>
-            <PrimaryButton>View All</PrimaryButton>
+            <PrimaryButton onClick={() => {
+              navigate('/dashboard/fabrication/shop-floor')
+            }}>View All</PrimaryButton>
           </div>
 
-          <div className="relative mt-4 overflow-x-auto">
+          <div className="relative mt-4 overflow-x-auto max-h-[32rem]">
             <table className="w-full text-sm text-left text-gray-500 rtl:text-right">
               <thead className="text-xs text-gray-700 uppercase bg-slate-100">
                 <tr>
@@ -163,7 +187,7 @@ function DashboardImpl() {
                 </tr>
               </thead>
               <tbody>
-                <TableRow data={productionResults} />
+                <TableRow data={productionProgress} />
               </tbody>
             </table>
           </div>
@@ -216,20 +240,20 @@ function ProgressItem({ title, progress, icon }: ProgressItemType) {
   )
 }
 
-function TableRow({ data }: { data: ProductionResultType[] }) {
+function TableRow({ data }: { data: ProductionProgressType[] }) {
   return (
     <>
       {data.map((item, index) => {
         return (
-          <tr key={index} className="bg-white border-b hover:bg-gray-50 ">
-            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+          <tr key={index} className="font-medium text-gray-900 bg-white border-b hover:bg-gray-50 whitespace-nowrap">
+            <td className="px-6 py-3">
               {index + 1}
-            </th>
-            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-              {item.part_no}
-            </th>
+            </td>
+            <td className="px-6 py-3">
+              {item.partNumber}
+            </td>
             <td className="px-6 py-4">
-              {item.part_name}
+              {item.partName}
             </td>
             <td className="px-6 py-4">
               {item.station}
@@ -240,42 +264,3 @@ function TableRow({ data }: { data: ProductionResultType[] }) {
     </>
   )
 }
-
-type ProductionResultType = {
-  part_no: string;
-  part_name: string;
-  station: string;
-}
-
-const productionResults: ProductionResultType[] = [
-  {
-    part_no: "1283ajkdbiu",
-    part_name: "Lorem Ipsum",
-    station: "Assembly",
-  },
-  {
-    part_no: "1283ajkdbiu",
-    part_name: "Lorem Ipsum",
-    station: "Assembly",
-  },
-  {
-    part_no: "1283ajkdbiu",
-    part_name: "Lorem Ipsum",
-    station: "Assembly",
-  },
-  {
-    part_no: "1283ajkdbiu",
-    part_name: "Lorem Ipsum",
-    station: "Assembly",
-  },
-  {
-    part_no: "1283ajkdbiu",
-    part_name: "Lorem Ipsum",
-    station: "Assembly",
-  },
-  {
-    part_no: "1283ajkdbiu",
-    part_name: "Lorem Ipsum",
-    station: "Assembly",
-  },
-]
