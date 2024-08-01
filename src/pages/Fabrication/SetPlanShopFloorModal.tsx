@@ -95,7 +95,6 @@ export default function SetPlanShopFloorModal({ id, onClose }: { id: number, onC
       const planFinishLocal = planFinish.toLocaleString('sv-SE').replace(' ', 'T');
 
       const data = { id, planStart: planStartLocal, planFinish: planFinishLocal };
-      console.log(data);
 
       const response = await secureApi('/fabrication/shop-floors/plan', {
         method: 'PUT',
@@ -106,8 +105,6 @@ export default function SetPlanShopFloorModal({ id, onClose }: { id: number, onC
           }
         }
       }).then(res => res.json())
-
-      console.log(response)
 
       if (!response.success) {
         toast.error(response.message)

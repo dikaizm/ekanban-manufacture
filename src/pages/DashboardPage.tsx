@@ -5,108 +5,171 @@ import PrimaryButton from "../components/PrimaryButton"
 import { Doughnut } from 'react-chartjs-2'
 import { Chart as Chartjs, ArcElement, Tooltip, Legend } from 'chart.js'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
+import { useSecureApi } from "../provider/utils/secureApiContext"
+import toast from "react-hot-toast"
 
 Chartjs.register(ArcElement, Tooltip, Legend, ChartDataLabels)
 
 export default function DashboardPage() {
   return (
     <AuthenticatedLayout className="h-screen">
-      <div className="p-4 sm:p-6 bg-slate-50">
-        <section className="flex flex-col justify-between gap-4 sm:flex-row">
-
-          <div className="w-full p-5 bg-white border rounded-lg">
-            <CardTitle>Progress Track</CardTitle>
-            <div className="flex flex-col gap-8 mt-4">
-              <ProgressItem title="Assembly Line" progress={50} icon={<RiTableFill className="w-full h-full" />} />
-              <ProgressItem title="Assembly Store" progress={30} icon={<RiTableFill className="w-full h-full" />} />
-              <ProgressItem title="Fabrication" progress={70} icon={<RiTableFill className="w-full h-full" />} />
-            </div>
-          </div>
-
-          <div className="p-5 bg-white border rounded-lg">
-            <CardTitle>Delay vs On-Time</CardTitle>
-
-            <div className="flex justify-center w-full mt-3">
-              <div className="w-[13rem] md:w-56 sm:w-64">
-                <Doughnut
-                  data={{
-                    labels: ['Delay', 'On-Time'],
-                    datasets: [
-                      {
-                        data: [21, 79],
-                        backgroundColor: [
-                          'rgb(255, 178, 44)',
-                          'rgb(54, 162, 235)',
-                        ],
-                        borderWidth: 1,
-                      },
-                    ]
-                  }}
-                  options={{
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    plugins: {
-                      legend: {
-                        position: 'bottom',
-                      },
-                      tooltip: {
-                        enabled: true,
-                        callbacks: {
-                          label: function (data) {
-                            const label = data.label;
-                            const value = data.dataset.data[data.dataIndex];
-                            return `${label}: ${value}%`;
-                          }
-                        },
-                      },
-                      datalabels: {
-                        color: '#fff',
-                        formatter: function (value) {
-                          return `${value}%`;
-                        }
-                      }
-                    },
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="mt-4">
-          <div className="w-full overflow-hidden bg-white border rounded-lg">
-            <div className="flex items-center justify-between px-5 pt-4">
-              <CardTitle>Production Progress</CardTitle>
-              <PrimaryButton>View All</PrimaryButton>
-            </div>
-
-            <div className="relative mt-4 overflow-x-auto">
-              <table className="w-full text-sm text-left text-gray-500 rtl:text-right">
-                <thead className="text-xs text-gray-700 uppercase bg-slate-100">
-                  <tr>
-                    <th scope="col" className="px-6 py-3">
-                      #
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Part Number
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Part Name
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Station
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <TableRow data={productionResults} />
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-      </div>
+      <DashboardImpl />
     </AuthenticatedLayout>
+  )
+}
+
+type ProgressTrackType = {
+  assemblyLine: number;
+  assemblyStore: number;
+  fabrication: number;
+}
+
+type DelayOntimeType = { delay: number, ontime: number }
+
+function DashboardImpl() {
+  const { secureApi } = useSecureApi()
+  const [progressTrack, setProgressTrack] = useState<ProgressTrackType>({ assemblyLine: 0, assemblyStore: 0, fabrication: 0 })
+  const [delayOntime, setDelayOntime] = useState<DelayOntimeType>({ delay: 0, ontime: 0 })
+
+  async function fetchProgressTrack() {
+    try {
+      const response = await secureApi('/stats/progress-track').then(res => res.json())
+
+      if (!response.success) {
+        toast.error(response.message)
+      }
+      setProgressTrack(response.data)
+
+    } catch (error) {
+      console.error(error)
+      toast.error('Failed to fetch progress track data')
+    }
+  }
+
+  async function fetchProductionProgress() {
+
+  }
+
+  async function fetchDelayOntime() {
+    try {
+      const response = await secureApi('/stats/delay-ontime').then(res => res.json())
+
+      if (!response.success) {
+        toast.error(response.message)
+      }
+
+      // Calculate percentage
+      const delay = Math.floor((response.data.delayQuantity / response.data.totalQuantity) * 100)
+
+      setDelayOntime({ delay, ontime: 100 - delay })
+
+    } catch (error) {
+      toast.error('Failed to fetch delay ontime data')
+    }
+  }
+
+  useEffect(() => {
+    fetchProgressTrack()
+    fetchDelayOntime()
+    fetchProductionProgress()
+  }, [])
+
+  return (
+    <div className="p-4 sm:p-6 bg-slate-50">
+      <section className="flex flex-col justify-between gap-4 sm:flex-row">
+
+        <div className="w-full p-5 bg-white border rounded-lg">
+          <CardTitle>Progress Track</CardTitle>
+          <div className="flex flex-col gap-8 mt-4">
+            <ProgressItem title="Assembly Line" progress={progressTrack.assemblyLine} icon={<RiTableFill className="w-full h-full" />} />
+            <ProgressItem title="Assembly Store" progress={progressTrack.assemblyStore} icon={<RiTableFill className="w-full h-full" />} />
+            <ProgressItem title="Fabrication" progress={progressTrack.fabrication} icon={<RiTableFill className="w-full h-full" />} />
+          </div>
+        </div>
+
+        <div className="p-5 bg-white border rounded-lg">
+          <CardTitle>Delay vs On-Time</CardTitle>
+
+          <div className="flex justify-center w-full mt-3">
+            <div className="w-[13rem] md:w-56 sm:w-64">
+              <Doughnut
+                data={{
+                  labels: ['Delay', 'On-Time'],
+                  datasets: [
+                    {
+                      data: [delayOntime.delay, delayOntime.ontime],
+                      backgroundColor: [
+                        'rgb(255, 178, 44)',
+                        'rgb(54, 162, 235)',
+                      ],
+                      borderWidth: 1,
+                    },
+                  ]
+                }}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: true,
+                  plugins: {
+                    legend: {
+                      position: 'bottom',
+                    },
+                    tooltip: {
+                      enabled: true,
+                      callbacks: {
+                        label: function (data) {
+                          const label = data.label;
+                          const value = data.dataset.data[data.dataIndex];
+                          return `${label}: ${value}%`;
+                        }
+                      },
+                    },
+                    datalabels: {
+                      color: '#fff',
+                      formatter: function (value) {
+                        return `${value}%`;
+                      }
+                    }
+                  },
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mt-4">
+        <div className="w-full overflow-hidden bg-white border rounded-lg">
+          <div className="flex items-center justify-between px-5 pt-4">
+            <CardTitle>Production Progress</CardTitle>
+            <PrimaryButton>View All</PrimaryButton>
+          </div>
+
+          <div className="relative mt-4 overflow-x-auto">
+            <table className="w-full text-sm text-left text-gray-500 rtl:text-right">
+              <thead className="text-xs text-gray-700 uppercase bg-slate-100">
+                <tr>
+                  <th scope="col" className="px-6 py-3">
+                    #
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Part Number
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Part Name
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Station
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <TableRow data={productionResults} />
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </div>
   )
 }
 
