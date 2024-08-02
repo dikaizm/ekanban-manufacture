@@ -62,11 +62,12 @@ function KanbanCard({ part, color = "bg-red-500", type }: KanbanCardType) {
     )
 }
 
-function CardRow({ label, value }: { label: string, value: string }) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function CardRow({ label, value }: { label: string, value: any }) {
     return (
         <div className="grid grid-cols-[38%_auto] gap-2">
             <div className="text-sm font-semibold text-start">{label}</div>
-            <div className="text-sm text-start">{value}</div>
+            <div className="text-sm text-start">{value || '-'}</div>
         </div>
     )
 }

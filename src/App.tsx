@@ -52,7 +52,7 @@ function App() {
                 } />
               </>
             } />
-            <Route path='/confirm-kanban/:cardId' element={<ConfirmKanbanPage />} />
+            <Route path='/confirm-kanban/:id' element={<ConfirmKanbanPage />} />
             <Route path='*' element={<div>404 Not Found</div>} />
           </Routes>
         </ModalQRProvider>

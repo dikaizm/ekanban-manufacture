@@ -10,9 +10,10 @@ import { SecureApiProvider } from "../provider/SecureApiProvider";
 interface AuthenticatedLayoutType {
   children: ReactNode
   className?: string
+  showSidebar?: boolean
 }
 
-export default function AuthenticatedLayout({ children, className }: AuthenticatedLayoutType) {
+export default function AuthenticatedLayout({ children, className, showSidebar = true }: AuthenticatedLayoutType) {
   const navigate = useNavigate()
 
   if (!localStorage.getItem('sidebarSubitem')) {
@@ -34,9 +35,9 @@ export default function AuthenticatedLayout({ children, className }: Authenticat
     <SecureApiProvider>
       <SidebarProvider>
         <Topbar />
-        <Sidebar />
+        {showSidebar && <Sidebar />}
 
-        <InsiderLayout className={className}>
+        <InsiderLayout className={className} showSidebar={showSidebar}>
           {children}
         </InsiderLayout>
       </SidebarProvider>
@@ -44,11 +45,11 @@ export default function AuthenticatedLayout({ children, className }: Authenticat
   )
 }
 
-function InsiderLayout({ children, className }: AuthenticatedLayoutType) {
+function InsiderLayout({ children, className, showSidebar }: AuthenticatedLayoutType) {
   const { isSidebarOpen } = useToggleSidebar()
 
   return (
-    <div className={"relative min-h-screen pt-16 bg-slate-50 transition-all duration-75 " + (className ? className : '') + (isSidebarOpen ? ' sm:ml-56' : ' sm:ml-[4.5rem]')}>
+    <div className={"relative min-h-screen pt-16 bg-slate-50 transition-all duration-75 " + (className ? className : '') + (showSidebar && (isSidebarOpen ? ' sm:ml-56' : ' sm:ml-[4.5rem]'))}>
       {children}
     </div>
   )

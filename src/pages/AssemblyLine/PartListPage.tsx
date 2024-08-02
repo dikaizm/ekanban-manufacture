@@ -43,38 +43,54 @@ function PartListImpl() {
   const [isComplete, setIsComplete] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
-  useEffect(() => {
-    const fetchParts = async () => {
-      try {
-        const response = await secureApi('/assembly-line/parts').then(res => res.json())
+  const fetchParts = async () => {
+    try {
+      const response = await secureApi('/assembly-line/parts').then(res => res.json())
 
-        let parts;
-        // include only partNumber, partName, quantity, quantityReq
-        if (response.data) {
-          parts = response.data.parts.map((item: PartType) => {
-            return {
-              partNumber: item.partNumber,
-              partName: item.partName,
-              quantity: item.quantity,
-              quantityReq: item.quantityReq
-            }
-          })
-        }
-
-        setParts(parts)
-        setPartStatus(response.data.partStatus)
-        setIsComplete(response.data.partStatus !== "Complete")
-
-      } catch (error) {
-        toast.error("Failed to fetch parts")
-        console.log(error)
-      } finally {
-        setIsLoading(false)
+      let parts;
+      // include only partNumber, partName, quantity, quantityReq
+      if (response.data) {
+        parts = response.data.parts.map((item: PartType) => {
+          return {
+            partNumber: item.partNumber,
+            partName: item.partName,
+            quantity: item.quantity,
+            quantityReq: item.quantityReq
+          }
+        })
       }
-    }
 
+      setParts(parts)
+      setPartStatus(response.data.partStatus)
+      setIsComplete(response.data.partStatus !== "Complete")
+
+    } catch (error) {
+      toast.error("Failed to fetch parts")
+      console.log(error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  useEffect(() => {
     fetchParts()
-  }, [secureApi])
+  }, [])
+
+  async function handleStartAssemble() {
+    try {
+      const response = await secureApi('/assembly-line/parts/start').then(res => res.json())
+      if (!response.success) {
+        toast.error(response.message)
+        return
+      }
+
+      toast.success(response.message)
+      fetchParts()
+
+    } catch (error) {
+      toast.error('Failed to start assemble')
+    }
+  }
 
   return (
     <>
@@ -100,6 +116,7 @@ function PartListImpl() {
 
                 <PrimaryButton disabled={isComplete}
                   icon={<IoIosArrowDroprightCircle className="w-6 h-6" />}
+                  onClick={handleStartAssemble}
                 >Start</PrimaryButton>
 
               </div>
