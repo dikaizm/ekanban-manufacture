@@ -32,6 +32,7 @@ export type QRKanbanCardType = {
     quantity: number
     previousProcess?: string
     nextProcess?: string
+    status: string
 }
 
 export type ModalQRPassType = {

@@ -20,10 +20,7 @@ function CreateOrderModal({ onClose }: CreateOrderModalType) {
 
   const [partName, setPartName] = useState<string>('')
   const [partNumber, setPartNumber] = useState<string>('')
-  const [quantity, setQuantity] = useState<number>()
-
-  // const encodedQRData = encodeURIComponent(JSON.stringify({ partName, partNumber, quantity }))
-  // const encodedQRData = encodeURIComponent("https://stelarhub.com")
+  const [quantity, setQuantity] = useState<string>('')
 
   // Error states
   const [partNameError, setPartNameError] = useState<string>('')
@@ -69,7 +66,7 @@ function CreateOrderModal({ onClose }: CreateOrderModalType) {
   }
 
   function handleQuantity(event: ChangeEvent<HTMLInputElement>) {
-    setQuantity(parseInt(event.target.value))
+    setQuantity(event.target.value)
   }
 
   useEffect(() => {
@@ -118,18 +115,6 @@ function CreateOrderModal({ onClose }: CreateOrderModalType) {
         </div>
 
         <hr />
-
-        {/* <div className="flex items-center justify-between gap-2 px-20 py-6">
-          <div className={"px-2 py-1 text-sm text-white rounded-full whitespace-nowrap " + (step === 0 ? 'bg-green-500 ' : 'bg-blue-500 ')}>
-            <span>Order Part</span>
-          </div>
-
-          <div className="w-full h-1 bg-blue-100 rounded-full"></div>
-
-          <div className={"px-2 py-1 text-sm rounded-full whitespace-nowrap " + (step === 1 ? 'bg-green-500 text-white ' : 'bg-slate-200 ')}>
-            <span>Generate QR</span>
-          </div>
-        </div> */}
 
         {/* Content */}
 

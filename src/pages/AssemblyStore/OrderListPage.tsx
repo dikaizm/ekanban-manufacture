@@ -78,8 +78,6 @@ function OrderListImpl() {
         data.requestHost = document.location.host
       }
 
-      console.log(data)
-
       const response = await secureApi('/assembly-store/orders/status', {
         method: 'POST',
         options: {

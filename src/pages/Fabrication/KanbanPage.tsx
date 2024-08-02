@@ -7,6 +7,7 @@ import { useSecureApi } from "../../provider/utils/secureApiContext"
 import toast from "react-hot-toast"
 import CircleLoading from "../../components/Loading"
 import { CardKanbanType } from "../../types/global"
+import { useModalQR } from "../../provider/utils/modalQRContext"
 
 const breadcrumbItems = [
   {
@@ -35,6 +36,7 @@ interface KanbanType {
 
 function KanbanImpl() {
   const { secureApi } = useSecureApi()
+  const { countUpdateModalQR } = useModalQR()
   const [kanbans, setKanbans] = useState<KanbanType>({
     queue: [],
     progress: [],
@@ -61,7 +63,7 @@ function KanbanImpl() {
 
   useEffect(() => {
     fetchKanbans()
-  }, [])
+  }, [countUpdateModalQR])
 
   return (
     <>

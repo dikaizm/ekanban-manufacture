@@ -5,6 +5,8 @@ interface ModalQRContextType {
     isModalQRVisible: boolean
     openModalQR: ({ id, type }: ModalQRPassType) => void
     closeModalQR: () => void
+    countUpdateModalQR: number
+    updateModalQR: () => void
 }
 
 export const ModalQRContext = createContext<ModalQRContextType | undefined>(undefined)

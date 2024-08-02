@@ -24,7 +24,7 @@ export default function ModalQR({ id, type = 'production' }: ModalQRType) {
 }
 
 function ModalQRImpl({ id, type = "production" }: ModalQRType) {
-  const { closeModalQR } = useModalQR()
+  const { closeModalQR, updateModalQR } = useModalQR()
   const { secureApi } = useSecureApi()
   const [data, setData] = useState<QRKanbanCardType>()
 
@@ -75,6 +75,46 @@ function ModalQRImpl({ id, type = "production" }: ModalQRType) {
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [closeModalQR]);
+
+  async function handleConfirm() {
+    const toastId = toast.loading('Confirming kanban...');
+
+    let kanbanStatus = '';
+    if (data?.status === 'queue') {
+      kanbanStatus = 'progress'
+    } else if (data?.status === 'progress') {
+      kanbanStatus = 'done'
+    } else if (data?.status === 'done') {
+      toast.success('Kanban status already done')
+    }
+
+    try {
+      const response = await secureApi('/kanban/confirm', {
+        method: 'PUT',
+        options: {
+          body: JSON.stringify({
+            id: data?.id,
+            status: kanbanStatus
+          }),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      }).then(res => res.json())
+      if (!response.success) {
+        throw new Error(response.message || 'Confirm kanban error');
+      }
+
+      toast.success(response.message || 'Kanban confirmed successfully', { id: toastId });
+
+      updateModalQR();
+      closeModalQR();
+
+    } catch (error) {
+      console.error('Confirm kanban error:', error);
+      toast.error(error instanceof Error ? error.message : 'Confirm kanban error', { id: toastId });
+    }
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -152,11 +192,12 @@ function ModalQRImpl({ id, type = "production" }: ModalQRType) {
         <hr />
 
         {/* Footer */}
-        <div className="flex justify-end gap-2 px-4 py-3">
+        <div className="flex justify-between gap-2 px-4 py-3">
           <PrimaryButton onClick={closeModalQR} style="outline">Close</PrimaryButton>
-          <PrimaryButton onClick={() => {
-            handlePrint()
-          }}>Print</PrimaryButton>
+          <div className="flex gap-2">
+            <PrimaryButton style="outline" onClick={handlePrint}>Print</PrimaryButton>
+            {data?.status !== 'done' && (<PrimaryButton onClick={handleConfirm}>Next</PrimaryButton>)}
+          </div>
         </div>
 
       </div>
