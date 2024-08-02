@@ -20,7 +20,7 @@ function CreateOrderModal({ onClose }: CreateOrderModalType) {
 
   const [partName, setPartName] = useState<string>('')
   const [partNumber, setPartNumber] = useState<string>('')
-  const [quantity, setQuantity] = useState<string>('')
+  const [quantity, setQuantity] = useState<number>(0)
 
   // const encodedQRData = encodeURIComponent(JSON.stringify({ partName, partNumber, quantity }))
   // const encodedQRData = encodeURIComponent("https://stelarhub.com")
@@ -69,7 +69,7 @@ function CreateOrderModal({ onClose }: CreateOrderModalType) {
   }
 
   function handleQuantity(event: ChangeEvent<HTMLInputElement>) {
-    setQuantity(event.target.value)
+    setQuantity(parseInt(event.target.value))
   }
 
   useEffect(() => {
