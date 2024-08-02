@@ -8,6 +8,7 @@ import { useReactToPrint } from "react-to-print"
 import toast from "react-hot-toast"
 import { useSecureApi } from "../provider/utils/secureApiContext"
 import { SecureApiProvider } from "../provider/SecureApiProvider"
+import CircleLoading from "./Loading"
 
 interface ModalQRType {
   id?: string
@@ -131,7 +132,11 @@ function ModalQRImpl({ id, type = "production" }: ModalQRType) {
 
             <div className="flex flex-col w-64 border-l border-slate-500">
               <div className="flex flex-col items-center p-4">
-                <img src={data?.qrCode} alt="QR Code" />
+                {data?.qrCode ? (
+                  <img src={data?.qrCode} alt="QR Code" />
+                ) : (
+                  <CircleLoading />
+                )}
                 <span className="mt-3 text-sm">Scan to confirm</span>
               </div>
               <div className="bg-slate-500 h-[0.8pt]"></div>
