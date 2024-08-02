@@ -38,60 +38,15 @@ export default function KanbanPage() {
 
           <div className="grid grid-cols-1 gap-4 mt-6 sm:grid-cols-3">
             <KanbanColumn title="Queue" color="bg-red-500" parts={[
-              {
-                id: "aasdlk",
-                partNumber: "asdhad asd ads asidha",
-                partName: "Part 1",
-                quantity: 10,
-                plannedStart: "2021-09-01",
-                status: "queue"
-              },
-              {
-                id: "asjdo",
-                partNumber: "jabduyq",
-                partName: "Part 2",
-                quantity: 20,
-                plannedStart: "2021-09-02",
-                status: "queue"
-              }
+
             ]} type={"production"} />
 
             <KanbanColumn title="On Progress" color="bg-yellow-400" parts={[
-              {
-                id: "1asdas",
-                partNumber: "asdhad asd ads asidha",
-                partName: "Part 1",
-                quantity: 10,
-                plannedStart: "2021-09-01",
-                status: "queue"
-              },
-              {
-                id: "2fdf",
-                partNumber: "jabduyq",
-                partName: "Part 2",
-                quantity: 20,
-                plannedStart: "2021-09-02",
-                status: "queue"
-              }
+              
             ]} type={"withdrawal"} />
 
             <KanbanColumn title="Done" color="bg-green-500" parts={[
-              {
-                id: "asd1",
-                partNumber: "asdhad asd ads asidha",
-                partName: "Part 1",
-                quantity: 10,
-                plannedStart: "2021-09-01",
-                status: "queue"
-              },
-              {
-                id: "2dfg",
-                partNumber: "jabduyq",
-                partName: "Part 2",
-                quantity: 20,
-                plannedStart: "2021-09-02",
-                status: "queue"
-              }
+              
             ]} type={"withdrawal"} />
           </div>
         </div>
@@ -99,7 +54,7 @@ export default function KanbanPage() {
 
       {isModalQRVisible && (
         <ModalQR
-          data={modalQRData}
+          id={modalQRData?.id}
           type={modalQRType}
         />
       )}
