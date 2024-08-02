@@ -1,6 +1,6 @@
 import { MdClose, MdEditSquare } from "react-icons/md";
 import MainTitle, { TitleSize } from "./Title/MainTitle";
-import { ReactNode } from "react";
+import { ReactNode, useCallback, useEffect } from "react";
 
 interface ModalType {
   title: string
@@ -10,8 +10,24 @@ interface ModalType {
 }
 
 export default function Modal({ title, content, onClose, width }: ModalType) {
+  const handleEscape = useCallback((event: KeyboardEvent) => {
+    if (event.key === 'Escape' && onClose) {
+      onClose();
+    }
+  }, [onClose]);
+
+  useEffect(() => {
+    document.body.classList.add('no-scroll');
+    document.addEventListener('keydown', handleEscape);
+
+    return () => {
+      document.body.classList.remove('no-scroll');
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [handleEscape]);
+
   return (
-    <div className="absolute inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="absolute w-full h-full bg-black/30" />
 
       <div className={"relative max-h-[32rem] bg-white rounded-xl " + (width ? width : "w-[32rem]")}>

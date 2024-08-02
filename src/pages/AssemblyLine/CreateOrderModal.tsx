@@ -86,16 +86,18 @@ function CreateOrderModal({ onClose }: CreateOrderModalType) {
       }
     };
 
+    document.body.classList.add('no-scroll');
     document.addEventListener('keydown', handleKeyDownOrder);
 
     // Clean up the event listener when the component unmounts
     return () => {
+      document.body.classList.remove('no-scroll');
       document.removeEventListener('keydown', handleKeyDownOrder);
     };
   }, [onClose, step]);
 
   return (
-    <div className="absolute inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="absolute w-full h-full bg-black/30"></div>
 
       <div className="relative max-h-[32rem] bg-white rounded-xl w-[32rem]">
