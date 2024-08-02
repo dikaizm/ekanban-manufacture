@@ -30,7 +30,6 @@ export default function EditPartQtyModal({ id, onClose }: { id: number, onClose?
   }, [])
 
   async function handleEdit(id: number) {
-    console.log("Edit", id)
 
     try {
       const response = await secureApi(`/assembly-line/part`, {
