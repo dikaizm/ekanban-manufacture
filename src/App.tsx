@@ -17,6 +17,7 @@ import { ModalQRProvider } from './provider/ModalQRProvider'
 import ConfirmKanbanPage from './pages/ConfirmKanbanPage'
 import { ModalProvider } from './provider/ModalProvider'
 import { Toaster } from 'react-hot-toast'
+import ConfirmKanbanResultPage from './pages/ConfirmKanbanResultPage'
 
 function App() {
   return (
@@ -52,6 +53,7 @@ function App() {
                 } />
               </>
             } />
+            <Route path='/confirm-kanban/result' element={<ConfirmKanbanResultPage />} />
             <Route path='/confirm-kanban/:id' element={<ConfirmKanbanPage />} />
             <Route path='*' element={<div>404 Not Found</div>} />
           </Routes>

@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AuthenticatedLayout from "../components/AuthenticatedLayout";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -30,6 +30,7 @@ type KanbanType = {
 }
 
 function ConfirmKanbanImpl({ id }: { id: string }) {
+  const navigate = useNavigate()
   const { secureApi } = useSecureApi()
   const [kanban, setKanban] = useState<KanbanType>({} as KanbanType)
 
@@ -51,31 +52,43 @@ function ConfirmKanbanImpl({ id }: { id: string }) {
   useEffect(() => { fetchKanban() }, [])
 
   async function handleConfirm() {
-    toast.loading('Confirming kanban...')
+    const toastId = toast.loading('Confirming kanban...');
+
+    let kanbanStatus = '';
+    if (kanban.status === 'queue') {
+      kanbanStatus = 'progress'
+    } else if (kanban.status === 'progress') {
+      kanbanStatus = 'done'
+    } else if (kanban.status === 'done') {
+      toast.success('Kanban status already done')
+    }
 
     try {
-      const response = await secureApi(`/kanban/confirm`, {
+      const response = await secureApi('/kanban/confirm', {
         method: 'PUT',
         options: {
           body: JSON.stringify({
             id: kanban.id,
-            status: kanban.status
+            status: kanbanStatus
           }),
           headers: {
             'Content-Type': 'application/json'
           }
         }
-      }).then(res => res.json())
-      if (!response.success) {
-        toast.error(response.message)
-        return
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to confirm kanban');
       }
 
-      toast.dismiss()
-      toast.success(response.message)
+      toast.success(data.message || 'Kanban confirmed successfully', { id: toastId });
+      navigate('/confirm-kanban/result');
+
     } catch (error) {
-      toast.dismiss()
-      toast.error('Confirm kanban error')
+      console.error('Confirm kanban error:', error);
+      toast.error(error instanceof Error ? error.message : 'Confirm kanban error', { id: toastId });
     }
   }
 
