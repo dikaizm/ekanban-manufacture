@@ -7,7 +7,7 @@ export default function ConfirmKanbanResultPage() {
 
   return (
     <AuthenticatedLayout showSidebar={false}>
-      <div className="flex flex-col items-center justify-center w-full p-4 sm:p-6 h-[calc(100vh-4rem)]">
+      <div className="flex flex-col items-center justify-center w-full p-4 sm:p-6 h-[calc(100vh-10rem)]">
         <IoCheckmarkCircle className="w-20 h-20 text-green-500" />
         <h1 className="mt-2 text-2xl font-bold">Success</h1>
         <p>Confirm kanban success</p>
