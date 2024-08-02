@@ -73,21 +73,23 @@ export default function LoginPage() {
 
   return (
     <main className="relative flex flex-col justify-between min-h-screen mx-auto bg-slate-50">
-      <div className="relative flex flex-col justify-between gap-4 px-8 py-4 sm:flex-row">
-        <a href="/">
-          <AppLogo />
-        </a>
-
-        <div className="flex items-center gap-3">
-          <span>Don't have an account yet?</span>
-          <a className="px-3 py-2 text-blue-500 border border-blue-500 rounded-lg" href="/register">Register</a>
+      <div className="relative flex flex-col items-center justify-between gap-4 px-8 py-4 text-white bg-green-500">
+        <h3 className="py-2 text-2xl font-semibold">Login to E-Kanban</h3>
+        <div className="h-[1px] bg-white/40 w-full"></div>
+        <div className="flex flex-col items-center justify-between w-full sm:flex-row">
+          <a href="/">
+            <AppLogo iconColor="bg-white" />
+          </a>
+          <div className="flex items-center gap-3">
+            <a className="px-3 py-2 text-white border border-white rounded-lg" href="/register">Register</a>
+          </div>
         </div>
       </div>
 
       <div className="flex items-center justify-center h-full ">
         <div className="relative p-12 rounded-xl w-[32rem] h-fit bg-white border border-slate-100">
           <div className="text-center">
-            <h1 className="text-2xl font-bold">Login to E-Kanban</h1>
+            <h1 className="text-2xl font-bold">Login</h1>
           </div>
 
           <form className="flex flex-col gap-4 mt-6" onSubmit={handleSubmit}>
