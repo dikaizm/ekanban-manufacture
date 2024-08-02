@@ -45,7 +45,7 @@ type RequestDataType = {
 
 function OrderListImpl() {
   const { secureApi } = useSecureApi()
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [orders, setOrders] = useState<OrderStoreType[]>([])
 
   const fetchOrders = async () => {
@@ -132,7 +132,7 @@ function OrderListImpl() {
             }
           ]} />
         ) : (
-          <CircleLoading />
+          <CircleLoading className="h-[calc(100vh-16rem)]" />
         )}
       </div>
     </>

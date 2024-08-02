@@ -8,6 +8,7 @@ import { useModalQR } from "../../provider/utils/modalQRContext"
 import { useSecureApi } from "../../provider/utils/secureApiContext"
 import toast from "react-hot-toast"
 import { PartKanbanType } from "../../types/global"
+import CircleLoading from "../../components/Loading"
 
 const breadcrumbItems = [
   {
@@ -60,6 +61,7 @@ function KanbanImpl() {
     progress: [],
     done: []
   })
+  const [isLoading, setIsLoading] = useState<boolean>(true)
 
   const fetchKanbans = async () => {
     try {
@@ -73,6 +75,8 @@ function KanbanImpl() {
 
     } catch (error) {
       toast.error("Failed to fetch kanban data")
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -87,13 +91,17 @@ function KanbanImpl() {
       <div className="p-4 sm:p-6">
         <MainTitle>Kanban Board</MainTitle>
 
-        <div className="grid grid-cols-1 gap-4 mt-6 sm:grid-cols-3">
-          <KanbanColumn title="Queue" color="bg-red-500" parts={kanbans.queue} type={"production"} />
+        {!isLoading ? (
+          <div className="grid grid-cols-1 gap-4 mt-6 sm:grid-cols-3">
+            <KanbanColumn title="Queue" color="bg-red-500" parts={kanbans.queue} type={"production"} />
 
-          <KanbanColumn title="On Progress" color="bg-yellow-400" parts={kanbans.progress} type={"production"} />
+            <KanbanColumn title="On Progress" color="bg-yellow-400" parts={kanbans.progress} type={"production"} />
 
-          <KanbanColumn title="Done" color="bg-green-500" parts={kanbans.done} type={"production"} />
-        </div>
+            <KanbanColumn title="Done" color="bg-green-500" parts={kanbans.done} type={"production"} />
+          </div>
+        ) : (
+          <CircleLoading className="h-[calc(100vh-16rem)]" />
+        )}
       </div>
     </>
   )

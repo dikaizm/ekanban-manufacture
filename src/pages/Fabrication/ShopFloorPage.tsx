@@ -41,7 +41,7 @@ function ShopFloorPage() {
 function ShopFloorImpl() {
   const { secureApi } = useSecureApi()
   const [shops, setShops] = useState([])
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const { openModal, isModalVisible } = useModal()
 
   const fetchShops = async () => {
@@ -152,7 +152,7 @@ function ShopFloorImpl() {
             }
           ]} />
         ) : (
-          <CircleLoading />
+          <CircleLoading className="h-[calc(100vh-16rem)]" />
         )}
       </div>
     </>

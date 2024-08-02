@@ -135,7 +135,7 @@ function ModalQRImpl({ id, type = "production" }: ModalQRType) {
                 {data?.qrCode ? (
                   <img src={data?.qrCode} alt="QR Code" />
                 ) : (
-                  <CircleLoading />
+                  <CircleLoading className="h-32" />
                 )}
                 <span className="mt-3 text-sm">Scan to confirm</span>
               </div>

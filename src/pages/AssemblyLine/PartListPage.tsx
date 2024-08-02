@@ -122,7 +122,7 @@ function PartListImpl() {
             </div>
           </>
         ) : (
-          <CircleLoading />
+          <CircleLoading className="h-[calc(100vh-16rem)]" />
         )}
 
       </div>

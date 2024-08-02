@@ -36,7 +36,7 @@ function OrderListPage() {
 function OrderListImpl() {
   const { secureApi } = useSecureApi()
   const [orders, setOrders] = useState([])
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
 
   const fetchOrders = async () => {
     try {
@@ -100,7 +100,7 @@ function OrderListImpl() {
             }
           ]} />
         ) : (
-          <CircleLoading />
+          <CircleLoading className="h-[calc(100vh-16rem)]" />
         )}
       </div>
     </>

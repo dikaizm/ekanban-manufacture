@@ -36,7 +36,7 @@ function PartListPage() {
 
 function PartListImpl() {
   const { secureApi } = useSecureApi()
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [parts, setParts] = useState<PartStoreType[]>([])
 
   const fetchParts = async () => {
@@ -107,7 +107,7 @@ function PartListImpl() {
             },
           ]} />
         ) : (
-          <CircleLoading />
+          <CircleLoading className="h-[calc(100vh-16rem)]" />
         )}
       </div>
     </>
