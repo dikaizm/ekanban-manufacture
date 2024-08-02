@@ -37,6 +37,12 @@ function OrderListPage() {
   )
 }
 
+type RequestDataType = {
+  id: number
+  status: string
+  requestHost?: string
+}
+
 function OrderListImpl() {
   const { secureApi } = useSecureApi()
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -45,7 +51,7 @@ function OrderListImpl() {
   const fetchOrders = async () => {
     try {
       const response = await secureApi('/assembly-store/orders').then(res => res.json())
-      
+
       if (!response.success) {
         toast.error(response.message)
       }
@@ -67,10 +73,17 @@ function OrderListImpl() {
 
   async function handleActionBtn(orderId: number, status: string) {
     try {
+      const data: RequestDataType = { id: orderId, status: status }
+      if (status === 'production') {
+        data.requestHost = document.location.host
+      }
+
+      console.log(data)
+
       const response = await secureApi('/assembly-store/orders/status', {
         method: 'POST',
         options: {
-          body: JSON.stringify({ id: orderId, status: status }),
+          body: JSON.stringify(data),
           headers: {
             'Content-Type': 'application/json'
           }
