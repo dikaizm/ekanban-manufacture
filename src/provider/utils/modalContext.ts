@@ -5,12 +5,14 @@ interface ModalContextType {
         [key: string]: boolean
         createOrder: boolean
         setPlanShopFloor: boolean
+        editPartQty: boolean
     }
     openModal: {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         [key: string]: (item: any) => void
         createOrder: () => void
         setPlanShopFloor: (id: number) => void
+        editPartQty: (id: number) => void
     }
     closeModal: () => void
 }

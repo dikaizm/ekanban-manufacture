@@ -12,7 +12,8 @@ interface InputTextType {
         value: string
         setValue: (value: string) => void
     },
-    value?: string
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    value?: any
     required?: boolean
 }
 

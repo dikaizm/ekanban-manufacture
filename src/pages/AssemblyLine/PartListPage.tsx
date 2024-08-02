@@ -10,6 +10,7 @@ import { PartType } from "../../types/global"
 import CircleLoading from "../../components/Loading"
 import { useSecureApi } from "../../provider/utils/secureApiContext"
 import toast from "react-hot-toast"
+import { useModal } from "../../provider/utils/modalContext"
 
 const partHead = {
   partNumber: "Part Number",
@@ -37,6 +38,7 @@ export default function PartListPage() {
 
 function PartListImpl() {
   const { secureApi } = useSecureApi()
+  const { openModal, isModalVisible } = useModal()
 
   const [parts, setParts] = useState<PartType[]>(PARTS)
   const [partStatus, setPartStatus] = useState<string>("No Status")
@@ -47,20 +49,7 @@ function PartListImpl() {
     try {
       const response = await secureApi('/assembly-line/parts').then(res => res.json())
 
-      let parts;
-      // include only partNumber, partName, quantity, quantityReq
-      if (response.data) {
-        parts = response.data.parts.map((item: PartType) => {
-          return {
-            partNumber: item.partNumber,
-            partName: item.partName,
-            quantity: item.quantity,
-            quantityReq: item.quantityReq
-          }
-        })
-      }
-
-      setParts(parts)
+      setParts(response.data.parts)
       setPartStatus(response.data.partStatus)
       setIsComplete(response.data.partStatus !== "Complete")
 
@@ -74,7 +63,7 @@ function PartListImpl() {
 
   useEffect(() => {
     fetchParts()
-  }, [])
+  }, [isModalVisible.editPartQty])
 
   async function handleStartAssemble() {
     try {
@@ -104,7 +93,17 @@ function PartListImpl() {
 
         {!isLoading ? (
           <>
-            <Table head={partHead} body={parts} />
+            <Table head={partHead} body={parts}
+              actions={[
+                {
+                  label: "Edit",
+                  color: 'bg-blue-500',
+                  onClick: (id: number) => {
+                    openModal.editPartQty(id)
+                  }
+                }
+              ]}
+            />
 
             <div className="w-full mt-3 bg-white border rounded-lg">
               <div className="flex items-center justify-between gap-2 p-2">
