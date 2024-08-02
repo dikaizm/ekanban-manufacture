@@ -111,10 +111,10 @@ function ModalQRImpl({ id, type = "production" }: ModalQRType) {
 
           <div className="flex justify-between border border-slate-500">
             <div className="grid w-full grid-cols-2 gap-2 p-2">
-              <InfoBox label="Part No." value={data?.partNumber} color={color} />
-              <InfoBox label="Part Name" value={data?.partName} color={color} />
-              <InfoBox label="Order Date" value={data?.orderDate} color={color} />
-              <InfoBox label="Finish Date" value={data?.finishDate} color={color} />
+              <InfoBox label="Part No." value={data?.partNumber || '-'} color={color} />
+              <InfoBox label="Part Name" value={data?.partName || '-'} color={color} />
+              <InfoBox label="Order Date" value={data?.orderDate || '-'} color={color} />
+              <InfoBox label="Finish Date" value={data?.finishDate || '-'} color={color} />
 
               {type === "production" ? (
                 <InfoBox label="Quantity" value={data?.quantity} color={color} />
@@ -142,7 +142,7 @@ function ModalQRImpl({ id, type = "production" }: ModalQRType) {
               <div className="bg-slate-500 h-[0.8pt]"></div>
               <div className="p-2 text-sm">
                 <span className="font-semibold">Card ID: </span>
-                {data?.cardId}
+                {data?.cardId || '-'}
               </div>
             </div>
           </div>

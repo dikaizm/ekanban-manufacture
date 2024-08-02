@@ -1,18 +1,15 @@
 import { ReactNode, useState } from "react";
-import { QRKanbanCardType } from "../types/global";
 import { ModalQRContext } from "./utils/modalQRContext";
+import { ModalQRPassType } from "../types/global";
+import ModalQR from "../components/ModalQR";
 
 export function ModalQRProvider({ children }: { children: ReactNode }) {
     const [isOpen, setIsOpen] = useState<boolean>(false)
-    const [data, setModalData] = useState<QRKanbanCardType>()
-    const [modalType, setModalType] = useState<"production" | "withdrawal">()
+    const [data, setModalData] = useState<ModalQRPassType>()
 
-    function openModalQR(data?: QRKanbanCardType) {
+    function openModalQR({ id, type }: ModalQRPassType) {
         setIsOpen(true)
-        if (data) {
-            setModalData(data)
-            setModalType(data.type)
-        }
+        setModalData({ id, type })
     }
 
     function closeModalQR() {
@@ -21,8 +18,15 @@ export function ModalQRProvider({ children }: { children: ReactNode }) {
     }
 
     return (
-        <ModalQRContext.Provider value={{ isModalQRVisible: isOpen, openModalQR: openModalQR, closeModalQR: closeModalQR, modalQRData: data, modalQRType: modalType }}>
+        <ModalQRContext.Provider value={{ isModalQRVisible: isOpen, openModalQR: openModalQR, closeModalQR: closeModalQR }}>
             {children}
+
+            {isOpen && (
+                <ModalQR
+                    id={data?.id}
+                    type={data?.type}
+                />
+            )}
         </ModalQRContext.Provider>
     )
 }

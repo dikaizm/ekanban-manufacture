@@ -1,12 +1,10 @@
 import { createContext, useContext } from "react"
-import { QRKanbanCardType } from "../../types/global"
+import { ModalQRPassType } from "../../types/global"
 
 interface ModalQRContextType {
     isModalQRVisible: boolean
-    openModalQR: (data?: QRKanbanCardType) => void
+    openModalQR: ({ id, type }: ModalQRPassType) => void
     closeModalQR: () => void
-    modalQRData?: QRKanbanCardType
-    modalQRType?: "production" | "withdrawal"
 }
 
 export const ModalQRContext = createContext<ModalQRContextType | undefined>(undefined)

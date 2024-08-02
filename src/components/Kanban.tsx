@@ -1,15 +1,14 @@
 import { FaBoxOpen } from "react-icons/fa6"
 import { useModalQR } from "../provider/utils/modalQRContext"
-import { PartKanbanType } from "../types/global"
+import { CardKanbanType } from "../types/global"
 
 interface KanbanColumnType {
     title: string
     color?: string
-    parts: PartKanbanType[]
-    type: "production" | "withdrawal"
+    cards: CardKanbanType[]
 }
 
-export function KanbanColumn({ title, color = "bg-red-500", parts, type }: KanbanColumnType) {
+export function KanbanColumn({ title, color = "bg-red-500", cards }: KanbanColumnType) {
     return (
         <div className="flex flex-col gap-4 border rounded-lg bg-slate-100 h-fit">
             <div className="overflow-hidden bg-white rounded-t-lg">
@@ -17,10 +16,10 @@ export function KanbanColumn({ title, color = "bg-red-500", parts, type }: Kanba
                 <h3 className="p-2 text-lg font-semibold text-center ">{title}</h3>
             </div>
             <div className="flex flex-col gap-3 px-2 pb-2">
-                {parts && parts.map(part => (
-                    <KanbanCard key={part.id} part={part} color={color} type={type} />
+                {cards && cards.map(card => (
+                    <KanbanCard key={card.id} card={card} color={color} />
                 ))}
-                {parts.length === 0 && (
+                {cards.length === 0 && (
                     <>
                         <FaBoxOpen className="w-10 h-10 mx-auto text-gray-300" />
                         <div className="mb-4 text-center text-gray-400">No data</div>
@@ -32,38 +31,31 @@ export function KanbanColumn({ title, color = "bg-red-500", parts, type }: Kanba
 }
 
 interface KanbanCardType {
-    part: PartKanbanType
+    card: CardKanbanType
     color?: string
-    type: "production" | "withdrawal"
 }
 
-function KanbanCard({ part, color = "bg-red-500", type }: KanbanCardType) {
+function KanbanCard({ card, color = "bg-red-500" }: KanbanCardType) {
     const { openModalQR } = useModalQR()
 
     return (
         <button onClick={() => {
             openModalQR({
-                id: part.id,
-                type: type,
-                cardId: part.cardId,
-                qrCode: "1234567890",
-                partName: part.partName,
-                partNumber: part.partNumber,
-                orderDate: "2021-10-10",
-                finishDate: "2021-10-20",
-                quantity: part.quantity,
+                id: card.id,
+                type: card.type,
             })
-        }} type="button" className="flex overflow-hidden transition-shadow duration-500 bg-white rounded-lg shadow hover:shadow-2xl">
-            <div className={"w-1 h-full " + color}></div>
+        }} type="button" className="relative flex overflow-hidden transition-shadow duration-500 bg-white rounded-lg shadow hover:shadow-2xl">
+            <div className={"w-1 absolute left-0 h-full " + color}></div>
             <div className="w-full p-4">
+                <div className="px-1 py-[0.125rem] mb-2 text-xs border rounded-full w-fit bg-slate-100">ID {card.orderId}</div>
                 <div className="flex flex-col gap-2">
-                    <CardRow label="Part Name" value={part.partName} />
+                    <CardRow label="Part Name" value={card.partName} />
                     <hr />
-                    <CardRow label="Part Number" value={part.partNumber} />
+                    <CardRow label="Part Number" value={card.partNumber} />
                     <hr />
-                    <CardRow label="Quantity" value={part.quantity.toString()} />
+                    <CardRow label="Quantity" value={card.quantity.toString()} />
                     <hr />
-                    <CardRow label="Plan Start" value={part.planStart} />
+                    <CardRow label="Plan Start" value={card.planStart} />
                 </div>
             </div>
         </button>

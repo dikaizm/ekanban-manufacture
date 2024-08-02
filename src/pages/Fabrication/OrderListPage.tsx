@@ -19,6 +19,7 @@ const breadcrumbItems = [
 ]
 
 const orderHead = {
+  orderId: "Order ID",
   partNumber: "Part Number",
   partName: "Part Name",
   kanbanId: "Kanban ID",

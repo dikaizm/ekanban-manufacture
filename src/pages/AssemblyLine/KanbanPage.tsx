@@ -2,7 +2,6 @@ import { useEffect, useState } from "react"
 import AuthenticatedLayout from "../../components/AuthenticatedLayout"
 import Breadcrumb from "../../components/Breadcrumb"
 import { KanbanColumn } from "../../components/Kanban"
-import ModalQR from "../../components/ModalQR"
 import MainTitle from "../../components/Title/MainTitle"
 import { useModalQR } from "../../provider/utils/modalQRContext"
 import CircleLoading from "../../components/Loading"
@@ -17,7 +16,7 @@ const breadcrumbItems = [
 ]
 
 export default function KanbanPage() {
-  const { isModalQRVisible, modalQRData, modalQRType } = useModalQR()
+  const { isModalQRVisible } = useModalQR()
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
   useEffect(() => {
@@ -42,17 +41,17 @@ export default function KanbanPage() {
 
           {!isLoading ? (
             <div className="grid grid-cols-1 gap-4 mt-6 sm:grid-cols-3">
-              <KanbanColumn title="Queue" color="bg-red-500" parts={[
+              <KanbanColumn title="Queue" color="bg-red-500" cards={[
 
-              ]} type={"production"} />
+              ]} />
 
-              <KanbanColumn title="On Progress" color="bg-yellow-400" parts={[
+              <KanbanColumn title="On Progress" color="bg-yellow-400" cards={[
 
-              ]} type={"withdrawal"} />
+              ]} />
 
-              <KanbanColumn title="Done" color="bg-green-500" parts={[
+              <KanbanColumn title="Done" color="bg-green-500" cards={[
 
-              ]} type={"withdrawal"} />
+              ]} />
             </div>
           ) : (
             <CircleLoading className="h-[calc(100vh-16rem)]" />
@@ -60,13 +59,6 @@ export default function KanbanPage() {
 
         </div>
       </AuthenticatedLayout>
-
-      {isModalQRVisible && (
-        <ModalQR
-          id={modalQRData?.id}
-          type={modalQRType}
-        />
-      )}
     </>
   )
 }

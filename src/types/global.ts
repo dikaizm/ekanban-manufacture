@@ -8,7 +8,7 @@ export type PartType = {
     updatedAt?: string
 }
 
-export type PartKanbanType = {
+export type CardKanbanType = {
     id: string
     cardId: string
     partNumber: string
@@ -16,6 +16,8 @@ export type PartKanbanType = {
     quantity: number
     planStart: string
     status: "queue" | "progress" | "done"
+    type: "production" | "withdrawal"
+    orderId: string
 }
 
 export type QRKanbanCardType = {
@@ -30,6 +32,11 @@ export type QRKanbanCardType = {
     quantity: number
     previousProcess?: string
     nextProcess?: string
+}
+
+export type ModalQRPassType = {
+    id: string
+    type: "production" | "withdrawal"
 }
 
 export interface UserType {
