@@ -1,18 +1,53 @@
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useModalQR } from "../provider/utils/modalQRContext"
 import { QRKanbanCardType } from "../types/global"
 import PrimaryButton from "./PrimaryButton"
 import MainTitle, { TitleSize } from "./Title/MainTitle"
 import { MdClose, MdQrCode } from "react-icons/md"
 import { useReactToPrint } from "react-to-print"
+import toast from "react-hot-toast"
+import { useSecureApi } from "../provider/utils/secureApiContext"
+import { SecureApiProvider } from "../provider/SecureApiProvider"
 
 interface ModalQRType {
-  data?: QRKanbanCardType
+  id?: string
   type?: "production" | "withdrawal"
 }
 
-export default function ModalQR({ data, type = "production" }: ModalQRType) {
+export default function ModalQR({ id, type = 'production' }: ModalQRType) {
+  return (
+    <SecureApiProvider>
+      <ModalQRImpl id={id} type={type} />
+    </SecureApiProvider>
+  )
+}
+
+function ModalQRImpl({ id, type = "production" }: ModalQRType) {
   const { closeModalQR } = useModalQR()
+  const { secureApi } = useSecureApi()
+  const [data, setData] = useState<QRKanbanCardType>()
+
+  async function fetchData() {
+
+    try {
+      const response = await secureApi(`/kanban/${id}`).then(res => res.json())
+      if (!response.success) {
+        toast.error(response.message)
+        return
+      }
+
+      setData(response.data)
+
+    } catch (error) {
+      toast.error('Failed to fetch data')
+    }
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [])
+
+
   const color = type === "production" ? "bg-green-300" : "bg-yellow-300"
 
   const contentToPrint = useRef<HTMLDivElement>(null)
@@ -94,7 +129,7 @@ export default function ModalQR({ data, type = "production" }: ModalQRType) {
 
             <div className="flex flex-col w-64 border-l border-slate-500">
               <div className="flex flex-col items-center p-4">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=HelloWorld&format=svg" alt="QR Code" />
+                <img src={data?.qrCode} alt="QR Code" />
                 <span className="mt-3 text-sm">Scan to confirm</span>
               </div>
               <div className="bg-slate-500 h-[0.8pt]"></div>

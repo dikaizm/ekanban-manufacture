@@ -114,11 +114,15 @@ function ConfirmKanbanImpl({ id }: { id: string }) {
           </div>
         </div>
 
-        <hr />
+        {kanban.status !== 'done' && (
+          <>
+            <hr />
 
-        <div className="flex w-full p-2">
-          <PrimaryButton className="justify-center w-full text-center" onClick={handleConfirm}>Proceed to {getNextStepLabel(kanban.status)}</PrimaryButton>
-        </div>
+            <div className="flex w-full p-2">
+              <PrimaryButton className="justify-center w-full text-center" onClick={handleConfirm}>Proceed to {getNextStepLabel(kanban.status)}</PrimaryButton>
+            </div>
+          </>
+        )}
 
       </div>
     </div>

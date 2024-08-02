@@ -10,14 +10,16 @@ export type PartType = {
 
 export type PartKanbanType = {
     id: string
+    cardId: string
     partNumber: string
     partName: string
     quantity: number
-    plannedStart: string
-    status: "queue" | "in_progress" | "done"
+    planStart: string
+    status: "queue" | "progress" | "done"
 }
 
 export type QRKanbanCardType = {
+    id: string
     type: "production" | "withdrawal"
     cardId: string
     qrCode: string

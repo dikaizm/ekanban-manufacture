@@ -1,10 +1,13 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import AuthenticatedLayout from "../../components/AuthenticatedLayout"
 import Breadcrumb from "../../components/Breadcrumb"
 import { KanbanColumn } from "../../components/Kanban"
 import ModalQR from "../../components/ModalQR"
 import MainTitle from "../../components/Title/MainTitle"
 import { useModalQR } from "../../provider/utils/modalQRContext"
+import { useSecureApi } from "../../provider/utils/secureApiContext"
+import toast from "react-hot-toast"
+import { PartKanbanType } from "../../types/global"
 
 const breadcrumbItems = [
   {
@@ -36,7 +39,7 @@ export default function KanbanPage() {
 
       {isModalQRVisible && (
         <ModalQR
-          data={modalQRData}
+          id={modalQRData?.id}
           type={modalQRType}
         />
       )}
@@ -44,7 +47,39 @@ export default function KanbanPage() {
   )
 }
 
+interface KanbanType {
+  queue: PartKanbanType[]
+  progress: PartKanbanType[]
+  done: PartKanbanType[]
+}
+
 function KanbanImpl() {
+  const { secureApi } = useSecureApi()
+  const [kanbans, setKanbans] = useState<KanbanType>({
+    queue: [],
+    progress: [],
+    done: []
+  })
+
+  const fetchKanbans = async () => {
+    try {
+      const response = await secureApi('/fabrication/kanbans').then(res => res.json())
+      if (!response.success) {
+        toast.error(response.message)
+        return
+      }
+
+      setKanbans(response.data)
+
+    } catch (error) {
+      toast.error("Failed to fetch kanban data")
+    }
+  }
+
+  useEffect(() => {
+    fetchKanbans()
+  }, [])
+
   return (
     <>
       <Breadcrumb items={breadcrumbItems} />
@@ -53,62 +88,11 @@ function KanbanImpl() {
         <MainTitle>Kanban Board</MainTitle>
 
         <div className="grid grid-cols-1 gap-4 mt-6 sm:grid-cols-3">
-          <KanbanColumn title="Queue" color="bg-red-500" parts={[
-            {
-              id: "adaoks",
-              partNumber: "asdhad asd ads asidha",
-              partName: "Part 1",
-              quantity: 10,
-              plannedStart: "2021-09-01",
-              status: "queue"
-            },
-            {
-              id: "asdof",
-              partNumber: "jabduyq",
-              partName: "Part 2",
-              quantity: 20,
-              plannedStart: "2021-09-02",
-              status: "queue"
-            }
-          ]} type={"production"} />
+          <KanbanColumn title="Queue" color="bg-red-500" parts={kanbans.queue} type={"production"} />
 
-          <KanbanColumn title="On Progress" color="bg-yellow-400" parts={[
-            {
-              id: "ajdoiajd",
-              partNumber: "asdhad asd ads asidha",
-              partName: "Part 1",
-              quantity: 10,
-              plannedStart: "2021-09-01",
-              status: "queue"
-            },
-            {
-              id: "adsjaos",
-              partNumber: "jabduyq",
-              partName: "Part 2",
-              quantity: 20,
-              plannedStart: "2021-09-02",
-              status: "queue"
-            }
-          ]} type={"production"} />
+          <KanbanColumn title="On Progress" color="bg-yellow-400" parts={kanbans.progress} type={"production"} />
 
-          <KanbanColumn title="Done" color="bg-green-500" parts={[
-            {
-              id: "oaids",
-              partNumber: "asdhad asd ads asidha",
-              partName: "Part 1",
-              quantity: 10,
-              plannedStart: "2021-09-01",
-              status: "queue"
-            },
-            {
-              id: "asdh",
-              partNumber: "jabduyq",
-              partName: "Part 2",
-              quantity: 20,
-              plannedStart: "2021-09-02",
-              status: "queue"
-            }
-          ]} type={"production"} />
+          <KanbanColumn title="Done" color="bg-green-500" parts={kanbans.done} type={"production"} />
         </div>
       </div>
     </>
