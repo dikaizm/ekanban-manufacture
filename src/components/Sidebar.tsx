@@ -1,13 +1,13 @@
 import { MouseEvent, ReactNode, useEffect, useState } from 'react'
-import { BiSolidFactory } from 'react-icons/bi'
 import { GoHomeFill } from 'react-icons/go'
-import { RiDatabase2Fill } from 'react-icons/ri'
 import { useToggleSidebar } from '../provider/utils/sidebarContext'
 import { useNavigate } from 'react-router-dom'
 import { TiArrowSortedDown, TiArrowSortedUp } from 'react-icons/ti'
 import { UserType } from '../types/global'
 import PrimaryButton from './PrimaryButton'
 import { useModal } from '../provider/utils/modalContext'
+import { MdFactory, MdStore } from 'react-icons/md'
+import { TbAssemblyFilled } from 'react-icons/tb'
 
 interface SubitemOpenType {
   [key: string]: boolean
@@ -36,7 +36,7 @@ export default function Sidebar() {
         {(user.role === 'manager') && (<MenuItem link="/dashboard" icon={<GoHomeFill className='w-6 h-6' />}>Dashboard</MenuItem>)}
 
         {(user.role === 'manager' || user.role === 'assembly_line_operator') && (
-          <MenuItem link="/dashboard/assembly-line" icon={<BiSolidFactory className='w-6 h-6' />} subitems={
+          <MenuItem link="/dashboard/assembly-line" icon={<TbAssemblyFilled className='w-6 h-6' />} subitems={
             {
               element: (
                 <>
@@ -71,7 +71,7 @@ export default function Sidebar() {
         )}
 
         {(user.role === 'manager' || user.role === 'assembly_store_operator') && (
-          <MenuItem link="/dashboard/assembly-store" icon={<RiDatabase2Fill className='w-6 h-6' />} subitems={
+          <MenuItem link="/dashboard/assembly-store" icon={<MdStore className='w-6 h-6' />} subitems={
             {
               element: (
                 <>
@@ -99,7 +99,7 @@ export default function Sidebar() {
         )}
 
         {(user.role === 'manager' || user.role === 'fabrication_operator') && (
-          <MenuItem link="/dashboard/fabrication" icon={<RiDatabase2Fill className='w-6 h-6' />} subitems={
+          <MenuItem link="/dashboard/fabrication" icon={<MdFactory className='w-6 h-6' />} subitems={
             {
               element: (
                 <>
