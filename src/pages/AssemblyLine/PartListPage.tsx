@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import AuthenticatedLayout from "../../components/AuthenticatedLayout"
 import Breadcrumb from "../../components/Breadcrumb"
 import PrimaryButton from "../../components/PrimaryButton"
@@ -11,7 +11,7 @@ import CircleLoading from "../../components/Loading"
 import { useSecureApi } from "../../provider/utils/secureApiContext"
 import toast from "react-hot-toast"
 import { useModal } from "../../provider/utils/modalContext"
-import DownloadTableExcel from "../../components/DownloadTableExcel"
+import exportToExcel from "../../helpers/exportExcel"
 
 const partHead = {
   partNumber: "Part Number",
@@ -40,7 +40,6 @@ export default function PartListPage() {
 function PartListImpl() {
   const { secureApi } = useSecureApi()
   const { openModal, isModalVisible } = useModal()
-  const tableRef = useRef<HTMLTableElement>(null)
 
   const [parts, setParts] = useState<PartType[]>(PARTS)
   const [partStatus, setPartStatus] = useState<string>("No Status")
@@ -101,14 +100,12 @@ function PartListImpl() {
       <div className="p-4 sm:p-6">
         <div className="flex items-center justify-between gap-4">
           <MainTitle>Part List</MainTitle>
-          <DownloadTableExcel filename="assembly-line-part-list" sheet="part list" currentTableRef={tableRef.current!}>
-            <PrimaryButton>Download</PrimaryButton>
-          </DownloadTableExcel>
+          <PrimaryButton onClick={() => exportToExcel({ filename: 'assembly-line-part-list', sheet: 'part list', header: partHead, body: parts })}>Download</PrimaryButton>
         </div>
 
         {!isLoading ? (
           <>
-            <Table tableRef={tableRef} head={partHead} body={parts}
+            <Table head={partHead} body={parts}
               actions={[
                 {
                   label: "Edit",

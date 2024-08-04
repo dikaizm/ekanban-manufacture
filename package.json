@@ -9,11 +9,20 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
+  "keywords": [
+    "kanban",
+    "manufacture",
+    "production",
+    "management"
+  ],
+  "author": "Izzulhaq Mahardika <dikaizm@gmail.com> (https://stelarhub.com)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dikaizm/ekanban-manufacture.git"
+  },
   "dependencies": {
     "chart.js": "^3.9.1",
     "chartjs-plugin-datalabels": "^2.2.0",
-    "exceljs": "^4.4.0",
-    "file-saver": "^2.0.5",
     "js-cookie": "^3.0.5",
     "react": "^18.2.0",
     "react-chartjs-2": "^4.3.1",

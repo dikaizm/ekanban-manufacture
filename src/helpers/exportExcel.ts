@@ -1,51 +1,41 @@
-// import { saveAs } from 'file-saver';
-// import ExcelJS from 'exceljs';
-// import toast from 'react-hot-toast';
+import * as XLSX from 'xlsx';
+import toast from 'react-hot-toast';
 
-// interface OptionType {
-//   sheetTitle: string;
-//   fileName: string;
-// }
+interface ExportExcelType {
+    filename: string;
+    sheet: string;
+    header: {
+        [key: string]: string;
+    };
+    body: {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        [key: string]: any;
+    }[];
+}
 
-// // eslint-disable-next-line @typescript-eslint/no-explicit-any
-// export default async function exportExcel(data: any, options?: OptionType) {
-//   const toastId = toast.loading('Exporting data...');
+export default async function exportToExcel({ filename, sheet, header, body }: ExportExcelType) {
+    const toastId = toast.loading('Downloading data...');
 
-//   try {
-//     const workbook = new ExcelJS.Workbook();
-//     const worksheet = workbook.addWorksheet(options?.sheetTitle || 'Sheet 1');
+    try {
+        const headerValues = Object.values(header);
+        const headerKeys = Object.keys(header);
+        const filteredData: (string | number)[][] = [['#', ...headerValues]];
 
-//     // Add header row
-//     if (data.data.length > 0) {
-//       worksheet.addRow(["No", "Nama", "Kuantitas", "Tanggal", "Tanggal Diperbarui"]);
-//     }
+        body.forEach((b, index) => {
+            const row = [index + 1, ...headerKeys.map((key) => b[key] ?? '')];
+            filteredData.push(row);
+        });
 
-//     const formattedData = data.data.map((item: ProductionResultType, index: number) => {
-//       return {
-//         id: index + 1,
-//         name: item.product?.product_name,
-//         quantity: item.quantity,
-//         createdAt: reformatISODateTime(item.createdAt),
-//         updatedAt: reformatISODateTime(item.updatedAt),
-//       };
-//     })
+        const ws = XLSX.utils.aoa_to_sheet(filteredData);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, sheet);
+        XLSX.writeFile(wb, `${filename}.xlsx`);
 
-//     // Add data rows
-//     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-//     formattedData.forEach((item: any) => {
-//       worksheet.addRow(Object.values(item));
-//     });
-
-//     // Generate buffer
-//     const excelBuffer = await workbook.xlsx.writeBuffer();
-//     const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
-//     saveAs(blob, 'hasil-produksi-genteng.xlsx');
-
-//     toast.dismiss(toastId);
-//     toast.success('Data exported successfully');
-//   } catch (error) {
-//     console.error('Export error:', error); // For debugging
-//     toast.dismiss(toastId);
-//     toast.error('Failed to export data');
-//   }
-// }
+        toast.dismiss(toastId);
+        toast.success('Data downloaded successfully');
+    } catch (error) {
+        console.error('Download error:', error);
+        toast.dismiss(toastId);
+        toast.error('Failed to download data');
+    }
+}

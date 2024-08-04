@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import AuthenticatedLayout from "../../components/AuthenticatedLayout"
 import Breadcrumb from "../../components/Breadcrumb"
 import Table from "../../components/Table"
@@ -9,7 +9,7 @@ import CircleLoading from "../../components/Loading"
 import { useModal } from "../../provider/utils/modalContext"
 import { ACTIONS } from "../../types/const"
 import PrimaryButton from "../../components/PrimaryButton"
-import DownloadTableExcel from "../../components/DownloadTableExcel"
+import exportToExcel from "../../helpers/exportExcel"
 
 const breadcrumbItems = [
   {
@@ -41,7 +41,6 @@ function ShopFloorPage() {
 }
 
 function ShopFloorImpl() {
-  const tableRef = useRef<HTMLTableElement>(null)
   const { secureApi } = useSecureApi()
   const [shops, setShops] = useState([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -124,13 +123,11 @@ function ShopFloorImpl() {
       <div className="p-4 sm:p-6">
         <div className="flex items-center justify-between gap-4">
           <MainTitle>Shop Floor</MainTitle>
-          <DownloadTableExcel filename="fabrication-shop-floor" sheet="shop floor" currentTableRef={tableRef.current!}>
-            <PrimaryButton>Download</PrimaryButton>
-          </DownloadTableExcel>
+          <PrimaryButton onClick={() => exportToExcel({ filename: 'fabrication-shop-floor', sheet: 'shop floor', header: shopHead, body: shops })}>Download</PrimaryButton>
         </div>
 
         {!isLoading ? (
-          <Table tableRef={tableRef} head={shopHead} body={shops} actions={[
+          <Table head={shopHead} body={shops} actions={[
             {
               label: "Set Plan",
               color: "bg-orange-500",

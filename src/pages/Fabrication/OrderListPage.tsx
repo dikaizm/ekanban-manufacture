@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import AuthenticatedLayout from "../../components/AuthenticatedLayout"
 import Breadcrumb from "../../components/Breadcrumb"
 import PrimaryButton from "../../components/PrimaryButton"
@@ -8,7 +8,7 @@ import { ACTIONS } from "../../types/const"
 import { useSecureApi } from "../../provider/utils/secureApiContext"
 import CircleLoading from "../../components/Loading"
 import toast from "react-hot-toast"
-import DownloadTableExcel from "../../components/DownloadTableExcel"
+import exportToExcel from "../../helpers/exportExcel"
 
 const breadcrumbItems = [
   {
@@ -36,7 +36,6 @@ function OrderListPage() {
 }
 
 function OrderListImpl() {
-  const tableRef = useRef<HTMLTableElement>(null)
   const { secureApi } = useSecureApi()
   const [orders, setOrders] = useState([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -88,13 +87,11 @@ function OrderListImpl() {
       <div className="p-4 sm:p-6">
         <div className="flex items-center justify-between gap-4">
           <MainTitle>Order List</MainTitle>
-          <DownloadTableExcel filename="fabrication-order-list" sheet="order list" currentTableRef={tableRef.current!}>
-            <PrimaryButton>Download</PrimaryButton>
-          </DownloadTableExcel>
+          <PrimaryButton onClick={() => exportToExcel({ filename: 'fabrication-order-list', sheet: 'order list', header: orderHead, body: orders })}>Download</PrimaryButton>
         </div>
 
         {!isLoading ? (
-          <Table tableRef={tableRef} head={orderHead} body={orders} actions={[
+          <Table head={orderHead} body={orders} actions={[
             {
               label: "Deliver",
               color: "bg-green-500",
