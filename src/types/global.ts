@@ -33,6 +33,7 @@ export type QRKanbanCardType = {
     qrCode: string
     partNumber: string[]
     partName: string
+    orderId: string
     orderDate: string
     finishDate: string
     quantity: number

@@ -33,7 +33,7 @@ export default function Sidebar() {
   return (
     <aside className={'fixed z-40 flex flex-col justify-between  min-h-screen p-3 transition-transform duration-200 pt-20 bg-white border-r ' + (isSidebarOpen ? 'w-[14rem]' : 'hidden sm:block w-[4.5rem]')}>
       <section className='flex flex-col gap-1'>
-        <MenuItem link="/dashboard" icon={<GoHomeFill className='w-6 h-6' />}>Dashboard</MenuItem>
+        {(user.role === 'manager') && (<MenuItem link="/dashboard" icon={<GoHomeFill className='w-6 h-6' />}>Dashboard</MenuItem>)}
 
         {(user.role === 'manager' || user.role === 'assembly_line_operator') && (
           <MenuItem link="/dashboard/assembly-line" icon={<BiSolidFactory className='w-6 h-6' />} subitems={

@@ -117,6 +117,26 @@ function ModalQRImpl({ id, type = "production" }: ModalQRType) {
     }
   }
 
+  async function handleDelete() {
+    try {
+      const response = await secureApi(`/assembly-line/order/${data?.orderId}`, {
+        method: 'DELETE', options: {}
+      }).then(res => res.json())
+      if (!response.success) {
+        toast.error(response.message)
+        return
+      }
+
+      toast.success(response.message);
+
+      updateModalQR();
+      closeModalQR();
+
+    } catch (error) {
+      toast.error('Failed to delete kanban')
+    }
+  }
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="absolute w-full h-full bg-black/30"></div>
@@ -196,6 +216,8 @@ function ModalQRImpl({ id, type = "production" }: ModalQRType) {
         <div className="flex justify-between gap-2 px-4 py-3">
           <PrimaryButton onClick={closeModalQR} style="outline">Close</PrimaryButton>
           <div className="flex gap-2">
+            {(data?.status === 'queue' && data.stationName === 'assembly_line') && (<PrimaryButton className="bg-red-500" onClick={handleDelete}>Delete</PrimaryButton>)}
+
             <PrimaryButton style="outline" onClick={handlePrint}>Print</PrimaryButton>
             {((data?.status === 'queue' && data.stationName !== 'assembly_line') || data?.status === 'progress') && (
               <PrimaryButton onClick={handleConfirm}>Next</PrimaryButton>
