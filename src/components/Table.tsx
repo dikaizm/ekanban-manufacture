@@ -1,6 +1,7 @@
 import { ACTIONS } from "../types/const"
 import CircleLoading from "./Loading"
 import { FaBoxOpen } from "react-icons/fa6"
+import PrimaryButton from "./PrimaryButton"
 
 interface ActionType {
   label: string
@@ -38,7 +39,7 @@ export default function Table({ head, body, actions }: TableType) {
   // if (headLen !== bodyItemLen) return <CircleLoading />
 
   return (
-    <div className="relative mt-6 overflow-x-auto border rounded-lg">
+    <div className="relative mt-3 overflow-x-auto border rounded-lg">
       <table className="w-full text-sm text-left text-gray-500 rtl:text-right">
         <thead className="text-xs text-gray-700 uppercase bg-slate-100">
           <tr>
@@ -79,7 +80,7 @@ function TableRow({ data, headKeys, actions }: TableRowType) {
           </td>
           {headKeys.map((key) => (
             <td key={key} className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">
-              {item[key] ? item[key] : '-'}
+              {item[key] ? item[key] : (key.includes('quantity') ? 0 : '-')}
             </td>
           ))}
           {actions && (
@@ -142,5 +143,17 @@ export function TableActionBtn({ label, color, disabled = false, onClick }: Tabl
     >
       {label}
     </button>
+  )
+}
+
+export function TableActionHeader() {
+  return (
+    <div className="flex items-center justify-between gap-2 mt-4">
+      <div className="flex items-center gap-2 p-1 border rounded-lg">
+        <PrimaryButton style="outline" size="sm">Select</PrimaryButton>
+        <PrimaryButton size="sm" disabled>Delete</PrimaryButton>
+      </div>
+      <PrimaryButton>Download</PrimaryButton>
+    </div>
   )
 }

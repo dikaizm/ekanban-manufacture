@@ -67,7 +67,18 @@ function PartListImpl() {
 
   async function handleStartAssemble() {
     try {
-      const response = await secureApi('/assembly-line/parts/start').then(res => res.json())
+      const response = await secureApi('/assembly-line/parts/start', {
+        method: 'POST',
+        options: {
+          body: JSON.stringify({
+            componentId: 1,
+            requestHost: document.location.host
+          }),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      }).then(res => res.json())
       if (!response.success) {
         toast.error(response.message)
         return

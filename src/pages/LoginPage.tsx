@@ -78,7 +78,7 @@ export default function LoginPage() {
         <div className="h-[1px] bg-white/40 w-full"></div>
         <div className="flex flex-col items-center justify-between w-full sm:flex-row">
           <a href="/">
-            <AppLogo iconColor="bg-white" />
+            <AppLogo />
           </a>
           <div className="flex items-center gap-3">
             <a className="px-3 py-2 text-white border border-white rounded-lg" href="/register">Register</a>

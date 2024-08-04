@@ -2,13 +2,14 @@ import { useEffect, useRef, useState } from "react"
 import { useModalQR } from "../provider/utils/modalQRContext"
 import { QRKanbanCardType } from "../types/global"
 import PrimaryButton from "./PrimaryButton"
-import MainTitle, { TitleSize } from "./Title/MainTitle"
+import MainTitle from "./Title/MainTitle"
 import { MdClose, MdQrCode } from "react-icons/md"
 import { useReactToPrint } from "react-to-print"
 import toast from "react-hot-toast"
 import { useSecureApi } from "../provider/utils/secureApiContext"
 import { SecureApiProvider } from "../provider/SecureApiProvider"
 import CircleLoading from "./Loading"
+import { TitleSize } from "../types/const"
 
 interface ModalQRType {
   id?: string
@@ -120,7 +121,7 @@ function ModalQRImpl({ id, type = "production" }: ModalQRType) {
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="absolute w-full h-full bg-black/30"></div>
 
-      <div className="relative max-h-[32rem] bg-white rounded-xl w-[40rem]">
+      <div className="relative bg-white rounded-xl w-[40rem]">
         {/* Row header */}
         <div className="flex justify-between px-4 py-3">
           {/* Row icon & title */}
@@ -151,7 +152,7 @@ function ModalQRImpl({ id, type = "production" }: ModalQRType) {
 
           <div className="flex justify-between border border-slate-500">
             <div className="grid w-full grid-cols-2 gap-2 p-2">
-              <InfoBox label="Part No." value={data?.partNumber || '-'} color={color} />
+              <InfoBox label="Part No." value={data?.partNumber ? data.partNumber.join(' ') : '-'} color={color} fontSize={data?.partNumber && data.partNumber.length > 1 ? 'text-xs' : 'text-sm'} />
               <InfoBox label="Part Name" value={data?.partName || '-'} color={color} />
               <InfoBox label="Order Date" value={data?.orderDate || '-'} color={color} />
               <InfoBox label="Finish Date" value={data?.finishDate || '-'} color={color} />
@@ -162,9 +163,9 @@ function ModalQRImpl({ id, type = "production" }: ModalQRType) {
                 <>
                   <div className="grid grid-cols-[24%_auto]">
                     <InfoBox label="Qty" value={data?.quantity} color={color} />
-                    <InfoBox label="Previous Process" value={data?.quantity} color={color} />
+                    <InfoBox label="Previous Process" value={data?.prevStation || '-'} color={color} />
                   </div>
-                  <InfoBox label="Next Process" value={data?.quantity} color={color} />
+                  <InfoBox label="Next Process" value={data?.nextStation || '-'} color={color} />
                 </>
               )}
 
@@ -196,7 +197,9 @@ function ModalQRImpl({ id, type = "production" }: ModalQRType) {
           <PrimaryButton onClick={closeModalQR} style="outline">Close</PrimaryButton>
           <div className="flex gap-2">
             <PrimaryButton style="outline" onClick={handlePrint}>Print</PrimaryButton>
-            {data?.status !== 'done' && (<PrimaryButton onClick={handleConfirm}>Next</PrimaryButton>)}
+            {((data?.status === 'queue' && data.stationName !== 'assembly_line') || data?.status === 'progress') && (
+              <PrimaryButton onClick={handleConfirm}>Next</PrimaryButton>
+            )}
           </div>
         </div>
 
@@ -209,13 +212,14 @@ interface InfoBoxType {
   label: string
   value?: string | number
   color: string
+  fontSize?: string
 }
 
-function InfoBox({ label, value, color }: InfoBoxType) {
+function InfoBox({ label, value, color, fontSize }: InfoBoxType) {
   return (
     <div className="flex flex-col text-center border h-18 border-slate-500">
-      <div className={"text-sm p-1 font-semibold w-full " + color}>{label}</div>
-      <div className="w-full px-2 py-2" style={{ color: color }}>{value}</div>
+      <div className={"p-1 font-semibold w-full " + color}>{label}</div>
+      <div className={"w-full px-2 py-2 " + fontSize} style={{ color: color }}>{value}</div>
     </div>
   )
 }

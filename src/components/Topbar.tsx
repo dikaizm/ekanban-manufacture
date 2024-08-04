@@ -60,8 +60,10 @@ export default function Topbar() {
       </section>
 
       <section ref={profileRef} className='relative'>
-        <button type="button" onClick={handleProfileClick} className={'flex items-center gap-2 p-2 border rounded-full  hover:bg-slate-200 ' + (isProfilOpen ? 'bg-slate-200' : 'border-slate-300')}>
-          <span className='hidden text-sm font-semibold sm:block'>{user.name}</span>
+        <button type="button" onClick={handleProfileClick} className={'flex items-center gap-2 py-2 pl-4 pr-2 border rounded-full  hover:bg-slate-200 ' + (isProfilOpen ? 'bg-slate-200' : 'border-slate-300')}>
+          <span className='hidden text-sm font-semibold sm:block'>
+            {user.name.length > 15 ? user.name.slice(0, 15) + '...' : user.name}
+          </span>
           <BsPersonCircle className='w-6 h-6' />
         </button>
 

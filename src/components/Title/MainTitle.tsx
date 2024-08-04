@@ -1,10 +1,5 @@
 import { ReactNode } from "react"
-
-export enum TitleSize {
-    small = "text-lg",
-    medium = "text-xl",
-    large = "text-2xl"
-}
+import { TitleSize } from "../../types/const"
 
 interface MainTitleType {
     children: ReactNode,

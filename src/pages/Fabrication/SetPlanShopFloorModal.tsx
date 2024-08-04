@@ -1,10 +1,11 @@
 import { MdClose, MdEditSquare } from "react-icons/md";
-import MainTitle, { TitleSize } from "../../components/Title/MainTitle";
+import MainTitle from "../../components/Title/MainTitle";
 import InputText from "../../components/Input/InputText";
 import PrimaryButton from "../../components/PrimaryButton";
 import toast from "react-hot-toast";
 import { useSecureApi } from "../../provider/utils/secureApiContext";
 import { useEffect, useState } from "react";
+import { TitleSize } from "../../types/const";
 
 export default function SetPlanShopFloorModal({ id, onClose }: { id: number, onClose?: () => void }) {
   const { secureApi } = useSecureApi()

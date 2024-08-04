@@ -8,7 +8,7 @@ type BreadcrumbType = {
 export default function Breadcrumb({ items }: BreadcrumbType) {
   return (
     <div className="px-6 pt-4 w-fit">
-      <nav className="flex px-5 py-3 text-gray-700 border border-gray-200 rounded-lg bg-gray-50" aria-label="Breadcrumb">
+      <nav className="flex px-3 py-2 text-gray-700 border border-gray-200 rounded-lg bg-gray-50" aria-label="Breadcrumb">
         <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
           {items.map((item, index) => (
             <li key={index} aria-current={index === items.length - 1 ? "page" : undefined}>
@@ -19,9 +19,9 @@ export default function Breadcrumb({ items }: BreadcrumbType) {
                   </svg>
                 )}
                 {item.link ? (
-                  <span className="text-sm font-medium text-gray-400">{item.label}</span>
+                  <span className="text-xs font-medium text-gray-400">{item.label}</span>
                 ) : (
-                  <span className="text-sm font-medium text-gray-700">{item.label}</span>
+                  <span className="text-xs font-medium text-gray-700">{item.label}</span>
                 )}
               </div>
             </li>

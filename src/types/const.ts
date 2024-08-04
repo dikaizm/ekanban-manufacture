@@ -55,3 +55,9 @@ export const PARTS: PartType[] = [
         quantity: 1
     }
 ]
+
+export enum TitleSize {
+    small = "text-lg",
+    medium = "text-xl",
+    large = "text-2xl"
+}

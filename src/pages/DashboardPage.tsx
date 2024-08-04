@@ -117,7 +117,7 @@ function DashboardImpl() {
 
           <div className="flex justify-center w-full mt-3">
             <div className="w-[13rem] md:w-56 sm:w-64">
-              {delayOntime.delay !== 0 && delayOntime.ontime !== 0 ? (
+              {delayOntime.delay !== 0 || delayOntime.ontime !== 0 ? (
                 <Doughnut
                   data={{
                     labels: ['Delay', 'On-Time'],

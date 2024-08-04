@@ -1,10 +1,10 @@
 import { ChangeEvent, useEffect, useState } from "react"
 import InputText from "../../components/Input/InputText"
 import PrimaryButton from "../../components/PrimaryButton"
-import MainTitle, { TitleSize } from "../../components/Title/MainTitle"
+import MainTitle from "../../components/Title/MainTitle"
 import { MdClose, MdEditSquare } from "react-icons/md"
 import InputSelect from "../../components/Input/InputSelect"
-import { PARTS } from "../../types/const"
+import { PARTS, TitleSize } from "../../types/const"
 import { FaCircleCheck } from "react-icons/fa6"
 import { useNavigate } from "react-router-dom"
 import { useSecureApi } from "../../provider/utils/secureApiContext"
@@ -153,7 +153,13 @@ function CreateOrderModal({ onClose }: CreateOrderModalType) {
 
             <div className="flex justify-center gap-2 mt-5">
               <PrimaryButton type="button" onClick={() => {
-                navigate('/dashboard/assembly-line/kanban')
+                const asmLinePath = '/dashboard/assembly-line/kanban'
+                if (window.location.pathname === asmLinePath) {
+                  location.reload()
+                } else {
+                  navigate(asmLinePath)
+                }
+
                 onClose && onClose()
               }}>Open Kanban</PrimaryButton>
             </div>

@@ -1,6 +1,7 @@
 import { MdClose, MdEditSquare } from "react-icons/md";
-import MainTitle, { TitleSize } from "./Title/MainTitle";
+import MainTitle from "./Title/MainTitle";
 import { ReactNode, useCallback, useEffect } from "react";
+import { TitleSize } from "../types/const";
 
 interface ModalType {
   title: string

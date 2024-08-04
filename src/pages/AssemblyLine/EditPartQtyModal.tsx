@@ -8,7 +8,12 @@ import { PartType } from "../../types/global"
 
 export default function EditPartQtyModal({ id, onClose }: { id: number, onClose?: () => void }) {
   const { secureApi } = useSecureApi()
-  const [part, setPart] = useState<PartType>({} as PartType)
+  const [part, setPart] = useState<PartType>({
+    partNumber: '',
+    partName: '',
+    quantity: 0,
+    quantityReq: 0
+  })
 
   async function fetchPart() {
     try {

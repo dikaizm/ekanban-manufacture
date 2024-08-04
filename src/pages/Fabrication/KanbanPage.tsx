@@ -6,7 +6,7 @@ import MainTitle from "../../components/Title/MainTitle"
 import { useSecureApi } from "../../provider/utils/secureApiContext"
 import toast from "react-hot-toast"
 import CircleLoading from "../../components/Loading"
-import { CardKanbanType } from "../../types/global"
+import { KanbanType } from "../../types/global"
 import { useModalQR } from "../../provider/utils/modalQRContext"
 
 const breadcrumbItems = [
@@ -26,12 +26,6 @@ export default function KanbanPage() {
       </AuthenticatedLayout>
     </>
   )
-}
-
-interface KanbanType {
-  queue: CardKanbanType[]
-  progress: CardKanbanType[]
-  done: CardKanbanType[]
 }
 
 function KanbanImpl() {
