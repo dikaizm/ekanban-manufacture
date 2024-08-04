@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import AuthenticatedLayout from "../../components/AuthenticatedLayout"
 import Breadcrumb from "../../components/Breadcrumb"
 import PrimaryButton from "../../components/PrimaryButton"
@@ -9,6 +9,7 @@ import { ACTIONS } from "../../types/const"
 import CircleLoading from "../../components/Loading"
 import toast from "react-hot-toast"
 import { PartStoreType } from "../../types/global"
+import DownloadTableExcel from "../../components/DownloadTableExcel"
 
 const breadcrumbItems = [
   {
@@ -35,6 +36,7 @@ function PartListPage() {
 }
 
 function PartListImpl() {
+  const tableRef = useRef<HTMLTableElement>(null)
   const { secureApi } = useSecureApi()
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [parts, setParts] = useState<PartStoreType[]>([])
@@ -92,11 +94,13 @@ function PartListImpl() {
       <div className="p-4 sm:p-6">
         <div className="flex items-center justify-between gap-4">
           <MainTitle>Part List</MainTitle>
-          <PrimaryButton>Download</PrimaryButton>
+          <DownloadTableExcel filename="assembly-store-part-list" sheet="part list" currentTableRef={tableRef.current!}>
+            <PrimaryButton>Download</PrimaryButton>
+          </DownloadTableExcel>
         </div>
 
         {!isLoading ? (
-          <Table head={partHead} body={parts} actions={[
+          <Table tableRef={tableRef} head={partHead} body={parts} actions={[
             {
               label: "Receive",
               color: "bg-blue-500",

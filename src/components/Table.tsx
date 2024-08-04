@@ -2,6 +2,7 @@ import { ACTIONS } from "../types/const"
 import CircleLoading from "./Loading"
 import { FaBoxOpen } from "react-icons/fa6"
 import PrimaryButton from "./PrimaryButton"
+import { RefObject } from "react"
 
 interface ActionType {
   label: string
@@ -12,13 +13,14 @@ interface ActionType {
 }
 
 interface TableType {
+  tableRef?: RefObject<HTMLTableElement>
   head: { [key: string]: string }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   body: { [key: string]: any }[]
   actions?: ActionType[]
 }
 
-export default function Table({ head, body, actions }: TableType) {
+export default function Table({ tableRef, head, body, actions }: TableType) {
   if (!head || !body) return <CircleLoading />
 
   const headKeys = Object.keys(head)
@@ -40,7 +42,7 @@ export default function Table({ head, body, actions }: TableType) {
 
   return (
     <div className="relative mt-4 overflow-x-auto border rounded-lg">
-      <table className="w-full text-sm text-left text-gray-500 rtl:text-right">
+      <table ref={tableRef} className="w-full text-sm text-left text-gray-500 rtl:text-right">
         <thead className="text-xs text-gray-700 uppercase bg-slate-100">
           <tr>
             <th scope="col" className="px-6 py-3">#</th>

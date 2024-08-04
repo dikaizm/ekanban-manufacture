@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import AuthenticatedLayout from "../../components/AuthenticatedLayout"
 import Breadcrumb from "../../components/Breadcrumb"
 import PrimaryButton from "../../components/PrimaryButton"
@@ -9,6 +9,7 @@ import { useSecureApi } from "../../provider/utils/secureApiContext"
 import CircleLoading from "../../components/Loading"
 import toast from "react-hot-toast"
 import { ACTIONS } from "../../types/const"
+import DownloadTableExcel from "../../components/DownloadTableExcel"
 
 const breadcrumbItems = [
   {
@@ -44,6 +45,7 @@ type RequestDataType = {
 }
 
 function OrderListImpl() {
+  const tableRef = useRef<HTMLTableElement>(null)
   const { secureApi } = useSecureApi()
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [orders, setOrders] = useState<OrderStoreType[]>([])
@@ -107,11 +109,13 @@ function OrderListImpl() {
       <div className="p-4 sm:p-6">
         <div className="flex items-center justify-between gap-4">
           <MainTitle>Order List</MainTitle>
-          <PrimaryButton>Download</PrimaryButton>
+          <DownloadTableExcel filename="assembly-store-order-list" sheet="order list" currentTableRef={tableRef.current!}>
+            <PrimaryButton>Download</PrimaryButton>
+          </DownloadTableExcel>
         </div>
 
         {!isLoading ? (
-          <Table head={orderHead} body={orders} actions={[
+          <Table tableRef={tableRef} head={orderHead} body={orders} actions={[
             {
               label: "Production",
               color: "bg-purple-500",
