@@ -39,7 +39,7 @@ export default function Table({ head, body, actions }: TableType) {
   // if (headLen !== bodyItemLen) return <CircleLoading />
 
   return (
-    <div className="relative mt-3 overflow-x-auto border rounded-lg">
+    <div className="relative mt-4 overflow-x-auto border rounded-lg">
       <table className="w-full text-sm text-left text-gray-500 rtl:text-right">
         <thead className="text-xs text-gray-700 uppercase bg-slate-100">
           <tr>
@@ -99,7 +99,7 @@ function TableRow({ data, headKeys, actions }: TableRowType) {
                     case ACTIONS.SHOP_FLOOR_FABRICATION.SET_PLAN:
                       return item.status !== 'pending';
                     case ACTIONS.SHOP_FLOOR_FABRICATION.START:
-                      return (item.status === 'in_progress' || item.status === 'finish') || !item.planStart || !item.planFinish;
+                      return (item.status === 'finish') || !item.planStart || !item.planFinish;
                     case ACTIONS.SHOP_FLOOR_FABRICATION.FINISH:
                       return (item.status === 'finish' || item.status === 'pending') || !item.planStart || !item.planFinish;
                     default:
@@ -107,10 +107,19 @@ function TableRow({ data, headKeys, actions }: TableRowType) {
                   }
                 };
 
+                const changeLabel = () => {
+                  switch (action.type) {
+                    case ACTIONS.SHOP_FLOOR_FABRICATION.START:
+                      return item.status === 'in_progress' ? "Cancel" : "Start";
+                    default:
+                      return action.label;
+                  }
+                }
+
                 return (
                   <TableActionBtn
                     key={actionIndex}
-                    label={action.label}
+                    label={changeLabel()}
                     color={action.color}
                     disabled={isDisabled()}
                     onClick={() => action.onClick && action.onClick(item.id)}
