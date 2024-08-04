@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react"
 import AuthenticatedLayout from "../../components/AuthenticatedLayout"
 import Breadcrumb from "../../components/Breadcrumb"
-import Table, { TableActionHeader } from "../../components/Table"
+import Table from "../../components/Table"
 import MainTitle from "../../components/Title/MainTitle"
 import { useSecureApi } from "../../provider/utils/secureApiContext"
 import toast from "react-hot-toast"
 import CircleLoading from "../../components/Loading"
 import { useModal } from "../../provider/utils/modalContext"
 import { ACTIONS } from "../../types/const"
+import PrimaryButton from "../../components/PrimaryButton"
 
 const breadcrumbItems = [
   {
@@ -119,10 +120,11 @@ function ShopFloorImpl() {
       <Breadcrumb items={breadcrumbItems} />
 
       <div className="p-4 sm:p-6">
-        <div>
+        <div className="flex items-center justify-between gap-4">
           <MainTitle>Shop Floor</MainTitle>
+          <PrimaryButton>Download</PrimaryButton>
         </div>
-        <TableActionHeader />
+
         {!isLoading ? (
           <Table head={shopHead} body={shops} actions={[
             {
